@@ -42,6 +42,16 @@ class CamelBERTConfig(BaseModel):
     max_edit_distance: int = 2
 
 
+class FusionConfig(BaseModel):
+    """Arbitration policy. Values chosen on the DEV split only (see
+    results/policy_sweep_dev.json): tau=0.40 is the centre of the flat
+    optimum 0.35-0.45, a stated robustness rule rather than the dev max."""
+
+    primary: str = "qwen_vl"
+    fallback: str = "easyocr"
+    primary_min_confidence: float = 0.40
+
+
 class SplitConfig(BaseModel):
     seed: int = 20260901
     golden_size: int = 50
@@ -55,6 +65,7 @@ class Config(BaseModel):
     qwen_vl: QwenVLConfig = Field(default_factory=QwenVLConfig)
     easyocr: EasyOCRConfig = Field(default_factory=EasyOCRConfig)
     camelbert: CamelBERTConfig = Field(default_factory=CamelBERTConfig)
+    fusion: FusionConfig = Field(default_factory=FusionConfig)
     split: SplitConfig = Field(default_factory=SplitConfig)
 
     @classmethod

@@ -51,7 +51,18 @@ def _qwen_vl(config: "Config") -> Recognizer:
     return QwenVLEngine(config)
 
 
+def _arbitration(config: "Config") -> Recognizer:
+    from moocr.fusion import ArbitrationEngine
+
+    return ArbitrationEngine(
+        primary=get_engine(config.fusion.primary, config),
+        fallback=get_engine(config.fusion.fallback, config),
+        primary_min_confidence=config.fusion.primary_min_confidence,
+    )
+
+
 ENGINES: dict[str, Callable[["Config"], Recognizer]] = {
+    "arbitration": _arbitration,
     "easyocr": _easyocr,
     "trocr": _trocr,
     "qwen_vl": _qwen_vl,
