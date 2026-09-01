@@ -18,7 +18,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import platform
+import statistics
 import subprocess
 import time
 from pathlib import Path
@@ -151,7 +153,9 @@ def _score_run(
             gr = [normalize(str(s["truth"]), SCORING_V1) for s in group]
             slices[f"{key}={value}"] = {"n": len(group), **vars(score_corpus(gh, gr))}
 
-    lat = sorted(float(s["latency_ms"]) for s in per_sample)  # type: ignore[arg-type]
+    lat = sorted(
+        float(s["latency_ms"]) for s in per_sample if not s["failed"]  # type: ignore[arg-type]
+    ) or [0.0]
     return {
         "meta": {
             "engine": engine_name,
@@ -174,8 +178,9 @@ def _score_run(
         "slices": slices,
         "confusions_top30": confusion_report(hyps_norm, refs_norm, 30),
         "latency_ms": {
-            "median": lat[len(lat) // 2],
-            "p95": lat[int(len(lat) * 0.95)] if len(lat) > 1 else lat[0],
+            "note": "successful samples only",
+            "median": statistics.median(lat),
+            "p95": lat[max(math.ceil(0.95 * len(lat)) - 1, 0)],
             "mean": round(sum(lat) / len(lat), 1),
         },
         "per_sample": per_sample,

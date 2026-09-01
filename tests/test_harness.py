@@ -41,7 +41,8 @@ def test_end_to_end_with_failure_accounting(tmp_path):
         assert result["n_failures"] == 1
         assert per["w_04"]["failed"] is True
         assert "excluding_failures" in result["scores"]
-    assert result["meta"]["norm_version"] == "1.0.0"
+    from moocr.normalization import NORM_VERSION
+    assert result["meta"]["norm_version"] == NORM_VERSION
     assert "suppressed" in str(result["scores"]["wer"])  # single-word refs
     assert result["bidi_check"]["n_reversed_better"] == 0
 
@@ -72,3 +73,23 @@ def test_compare_runs_paired(tmp_path):
     assert out["delta_normalized"]["delta_corpus_cer"] <= 0  # A no worse
     fb = out["fix_break_a_to_b"]
     assert fb["fixed"] + fb["broke"] + fb["unchanged"] == 2
+
+
+def test_compare_rejects_mismatched_truths(tmp_path):
+    import pytest as _pytest
+
+    truths_a = {"w_00": "مدرسة", "w_01": "كتاب", "w_02": "قلم",
+                "w_03": "بيت", "w_04": "شمس", "w_05": "قمر"}
+    manifest = _dataset(tmp_path, truths_a)
+    ENGINES["fake"] = lambda cfg: FakeRecognizer(truths_a)
+    try:
+        r = run_engine_on_split("fake", manifest, "heldout", Config())
+    finally:
+        del ENGINES["fake"]
+    pa, pb = tmp_path / "a.json", tmp_path / "b.json"
+    pa.write_text(json.dumps(r, ensure_ascii=False), encoding="utf-8")
+    r2 = json.loads(json.dumps(r))
+    r2["per_sample"][0]["truth"] = "مختلف"
+    pb.write_text(json.dumps(r2, ensure_ascii=False), encoding="utf-8")
+    with _pytest.raises(ValueError, match="DIFFERENT ground truth"):
+        compare_runs(pa, pb)

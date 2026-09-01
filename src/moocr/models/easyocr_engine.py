@@ -27,27 +27,48 @@ if TYPE_CHECKING:
 def order_regions_rtl(regions: list[tuple[object, ...]]) -> list[tuple[object, ...]]:
     """Sort (bbox, text, conf) tuples into Arabic reading order.
 
-    Group into horizontal bands by vertical center, then within a band sort
-    by right edge, rightmost first.
+    Regions are grouped into lines by vertical-interval overlap against a
+    running band interval (median of member intervals), which is robust to:
+    - tall boxes from stacked diacritics (overlap ratio uses the SMALLER
+      height, so a tall box still overlaps a short neighbour),
+    - monotone baseline drift from page skew (the band interval follows its
+      members instead of being frozen at the first region),
+    - a tall second-line box reaching toward line 1 (its overlap with line 1
+      is small relative to line 1's height).
+    Within a band, regions sort by right edge, rightmost first (RTL).
     """
-    def geom(region: Any) -> tuple[float, float, float]:
+
+    def interval(region: Any) -> tuple[float, float, float]:
         bbox = region[0]
         ys = [p[1] for p in bbox]
         xs = [p[0] for p in bbox]
-        return (min(ys) + max(ys)) / 2, max(xs), max(ys) - min(ys)
+        return min(ys), max(ys), max(xs)
 
-    annotated: list[tuple[tuple[float, float, float], tuple[object, ...]]] = [(geom(r), r) for r in regions]
-    annotated.sort(key=lambda t: t[0][0])
-    bands: list[list[tuple[tuple[float, float, float], tuple[object, ...]]]] = []
-    for (cy, _, h), region in annotated:
-        if bands and abs(cy - bands[-1][0][0][0]) < max(h, 1) * 0.6:
-            bands[-1].append(((cy, geom(region)[1], h), region))
-        else:
-            bands.append([((cy, geom(region)[1], h), region)])
+    annotated = [(interval(r), r) for r in regions]
+    annotated.sort(key=lambda t: (t[0][0] + t[0][1]) / 2)
+
+    bands: list[dict[str, Any]] = []
+    for (y0, y1, xr), region in annotated:
+        h = max(y1 - y0, 1.0)
+        placed = False
+        for band in bands:
+            b0 = float(np.median(band["y0s"]))
+            b1 = float(np.median(band["y1s"]))
+            overlap = min(y1, b1) - max(y0, b0)
+            if overlap / max(min(h, max(b1 - b0, 1.0)), 1.0) >= 0.5:
+                band["members"].append((xr, region))
+                band["y0s"].append(y0)
+                band["y1s"].append(y1)
+                placed = True
+                break
+        if not placed:
+            bands.append({"members": [(xr, region)], "y0s": [y0], "y1s": [y1]})
+
+    bands.sort(key=lambda b: float(np.median(b["y0s"])))
     ordered: list[tuple[object, ...]] = []
     for band in bands:
-        band.sort(key=lambda t: -t[0][1])  # right edge descending
-        ordered.extend(r for _, r in band)
+        band["members"].sort(key=lambda m: -m[0])  # right edge descending
+        ordered.extend(r for _, r in band["members"])
     return ordered
 
 

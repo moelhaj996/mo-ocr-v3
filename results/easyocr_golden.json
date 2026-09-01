@@ -9,13 +9,14 @@
     },
     "split": "golden",
     "manifest": "manifests/manifest_apti.json",
-    "norm_version": "1.0.0",
+    "norm_version": "1.1.0",
     "scoring_profile": "scoring_v1",
     "seed": 20260901,
     "moocr_version": "3.0.0",
     "git_commit": "45b837930984d3a0938d61be8d3ea6c784cd67b2",
     "platform": "macOS-26.6.2-arm64-arm-64bit",
-    "timestamp": "2026-09-01T18:29:23"
+    "timestamp": "2026-09-01T18:29:23",
+    "rescored_from": "1.0.0"
   },
   "n_samples": 50,
   "n_failures": 0,
@@ -212,7 +213,8 @@
     }
   ],
   "latency_ms": {
-    "median": 59.4,
+    "note": "successful samples only",
+    "median": 59.349999999999994,
     "p95": 74.0,
     "mean": 61.9
   },
@@ -717,5 +719,23 @@
       "len_bucket": "medium(5-8)",
       "has_digit": false
     }
-  ]
+  ],
+  "superseded": {
+    "norm_version": "1.0.0",
+    "scores": {
+      "raw": {
+        "corpus_cer": 0.25906735751295334,
+        "macro_cer": 0.2583333333333333,
+        "exact_match": 0.1,
+        "n": 50
+      },
+      "normalized": {
+        "corpus_cer": 0.23316062176165803,
+        "macro_cer": 0.23353968253968255,
+        "exact_match": 0.12,
+        "n": 50
+      },
+      "wer": "suppressed: all references are single words; WER degenerates to exact-match"
+    }
+  }
 }

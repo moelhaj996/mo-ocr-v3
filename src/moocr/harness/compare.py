@@ -19,9 +19,25 @@ from moocr.normalization import SCORING_V1, normalize
 def compare_runs(path_a: Path, path_b: Path) -> dict[str, object]:
     a = json.loads(path_a.read_text(encoding="utf-8"))
     b = json.loads(path_b.read_text(encoding="utf-8"))
+    for name, run in (("A", a), ("B", b)):
+        ids = [s["id"] for s in run["per_sample"]]
+        if len(ids) != len(set(ids)):
+            raise ValueError(f"run {name} contains duplicate sample ids")
     sa = {s["id"]: s for s in a["per_sample"]}
     sb = {s["id"]: s for s in b["per_sample"]}
     common = sorted(sa.keys() & sb.keys())
+    if not common:
+        raise ValueError(
+            "runs share no sample ids — were they produced from the same "
+            "manifest and split?"
+        )
+    mismatched = [i for i in common if sa[i]["truth"] != sb[i]["truth"]]
+    if mismatched:
+        raise ValueError(
+            f"{len(mismatched)} ids have DIFFERENT ground truth in the two "
+            f"runs (e.g. {mismatched[:3]}) — refusing to compare across "
+            "different datasets"
+        )
     dropped = len(sa.keys() | sb.keys()) - len(common)
 
     refs = [sa[i]["truth"] for i in common]

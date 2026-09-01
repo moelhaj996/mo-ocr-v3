@@ -5,7 +5,9 @@ Definitions (stated per protocol §6):
 - Per-sample CER = levenshtein(ref, hyp) / max(len(ref), 1). The max(.,1)
   guard means an empty reference with a non-empty hypothesis scores
   len(hyp), not infinity.
-- Corpus CER (primary) = total edits / total reference characters.
+- Corpus CER (primary) = total edits / total reference characters
+  (guarded to max(total, 1) only when the whole corpus is empty; empty
+  individual references contribute edits but no denominator).
 - Macro CER (secondary) = unweighted mean of per-sample CER.
 - WER analogous over whitespace tokens. WER is NOT meaningful on
   single-word datasets; callers must suppress it there.
@@ -75,10 +77,11 @@ class CorpusScore:
 def score_corpus(hyps: Sequence[str], refs: Sequence[str]) -> CorpusScore:
     assert len(hyps) == len(refs) and refs
     edits = [levenshtein(r, h) for h, r in zip(hyps, refs)]
-    ref_lens = [max(len(r), 1) for r in refs]
+    per_sample_lens = [max(len(r), 1) for r in refs]
+    total_ref = sum(len(r) for r in refs)
     return CorpusScore(
-        corpus_cer=sum(edits) / sum(ref_lens),
-        macro_cer=float(np.mean([e / l for e, l in zip(edits, ref_lens)])),
+        corpus_cer=sum(edits) / max(total_ref, 1),
+        macro_cer=float(np.mean([e / l for e, l in zip(edits, per_sample_lens)])),
         exact_match=sum(h == r for h, r in zip(hyps, refs)) / len(refs),
         n=len(refs),
     )
@@ -114,15 +117,17 @@ def paired_bootstrap_delta(
     assert len(hyps_a) == len(hyps_b) == len(refs) and refs
     edits_a = np.array([levenshtein(r, h) for h, r in zip(hyps_a, refs)], dtype=float)
     edits_b = np.array([levenshtein(r, h) for h, r in zip(hyps_b, refs)], dtype=float)
-    lens = np.array([max(len(r), 1) for r in refs], dtype=float)
+    lens = np.array([len(r) for r in refs], dtype=float)
 
     rng = np.random.default_rng(seed)
     n = len(refs)
     idx = rng.integers(0, n, size=(n_resamples, n))
-    la = edits_a[idx].sum(axis=1) / lens[idx].sum(axis=1)
-    lb = edits_b[idx].sum(axis=1) / lens[idx].sum(axis=1)
+    denom = np.maximum(lens[idx].sum(axis=1), 1.0)
+    la = edits_a[idx].sum(axis=1) / denom
+    lb = edits_b[idx].sum(axis=1) / denom
     deltas = la - lb
-    point = edits_a.sum() / lens.sum() - edits_b.sum() / lens.sum()
+    total = max(lens.sum(), 1.0)
+    point = edits_a.sum() / total - edits_b.sum() / total
     frac_le = float(np.mean(deltas <= 0))
     frac_ge = float(np.mean(deltas >= 0))
     return {

@@ -38,3 +38,30 @@ def test_output_preserves_meaningful_orthography():
 
 def test_whitespace_collapse():
     assert normalize("  اب   جد \n", SCORING_V1) == "اب جد"
+
+
+def test_idempotent_adversarial_combining_sequences():
+    # verification finding: joiner/tatweel between base letter and combining
+    # hamza/madda must not block composition or break idempotence
+    cases = [
+        "ا‍ٔ",  # alef + ZWJ + hamza above
+        "و‍ٔ",  # waw + ZWJ + hamza above
+        "ي‎ٔ",  # yeh + LRM + hamza above
+        "ا‌ٓ",  # alef + ZWNJ + madda
+        "اـٔ",  # alef + tatweel + hamza above
+    ]
+    for profile in (SCORING_V1, OUTPUT_V1):
+        for s in cases:
+            once = normalize(s, profile)
+            assert normalize(once, profile) == once, (profile.name, s)
+
+
+def test_joiner_cannot_change_scoring_equivalence():
+    # canonically equivalent inputs must normalize identically
+    assert normalize("ا‍ٔحمد", SCORING_V1) == normalize("أحمد", SCORING_V1)
+
+
+def test_bom_and_zwsp_stripped():
+    assert normalize("﻿كتب", SCORING_V1) == "كتب"
+    assert normalize("كت​ب", SCORING_V1) == "كتب"
+    assert normalize("كت⁠ب­", SCORING_V1) == "كتب"

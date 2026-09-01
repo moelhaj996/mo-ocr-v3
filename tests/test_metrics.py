@@ -84,3 +84,9 @@ def test_cer_matches_jiwer_when_available(hyp, ref):
     if not ref:
         return  # jiwer rejects empty refs; our convention documented instead
     assert cer(hyp, ref) == pytest.approx(jiwer.cer(ref, hyp))
+
+
+def test_corpus_cer_empty_ref_matches_documented_definition():
+    # verification finding: empty refs must not inflate the denominator
+    s = score_corpus(["x", "ab"], ["", "ab"])
+    assert s.corpus_cer == pytest.approx(1 / 2)  # 1 edit / 2 true ref chars

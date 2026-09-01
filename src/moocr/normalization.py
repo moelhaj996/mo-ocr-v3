@@ -19,13 +19,13 @@ import re
 import unicodedata
 from dataclasses import dataclass
 
-NORM_VERSION = "1.0.0"
+NORM_VERSION = "1.1.0"
 
 # U+064B..U+0652 (tanwin, shadda, sukun, harakat) + U+0670 superscript alef.
 _DIACRITICS_RE = re.compile("[ً-ْٰ]")
 _TATWEEL = "ـ"
-# ZWNJ, ZWJ, LRM, RLM, ALM — invisible joiners and bidi marks.
-_INVISIBLES_RE = re.compile("[‌‍‎‏؜]")
+# ZWNJ, ZWJ, LRM, RLM, ALM, BOM/ZWNBSP, ZWSP, WORD JOINER, SOFT HYPHEN.
+_INVISIBLES_RE = re.compile("[\u200c\u200d\u200e\u200f\u061c\ufeff\u200b\u2060\u00ad]")
 _ALEF_RE = re.compile("[أإآٱ]")  # أ إ آ ٱ
 _ARABIC_INDIC = {ord("٠") + i: ord("0") + i for i in range(10)}  # ٠..٩
 _EXT_ARABIC_INDIC = {ord("۰") + i: ord("0") + i for i in range(10)}  # ۰..۹
@@ -76,13 +76,19 @@ OUTPUT_V1 = NormalizationProfile(
 
 
 def normalize(text: str, profile: NormalizationProfile) -> str:
-    """Apply ``profile`` to ``text``. Pure and idempotent."""
-    if profile.nfkc:
-        text = unicodedata.normalize("NFKC", text)
+    """Apply ``profile`` to ``text``. Pure and idempotent.
+
+    Invisibles and tatweel are stripped BEFORE NFKC so that a joiner or
+    tatweel between a base letter and a combining hamza/madda cannot block
+    canonical composition; a final NFC pass guarantees idempotence after
+    the substitution rules.
+    """
     if profile.strip_invisibles:
         text = _INVISIBLES_RE.sub("", text)
     if profile.strip_tatweel:
         text = text.replace(_TATWEEL, "")
+    if profile.nfkc:
+        text = unicodedata.normalize("NFKC", text)
     if profile.strip_diacritics:
         text = _DIACRITICS_RE.sub("", text)
     if profile.unify_alef:
@@ -95,4 +101,6 @@ def normalize(text: str, profile: NormalizationProfile) -> str:
         text = text.translate(_DIGIT_TABLE)
     if profile.collapse_whitespace:
         text = " ".join(text.split())
+    if profile.nfkc:
+        text = unicodedata.normalize("NFC", text)
     return text
