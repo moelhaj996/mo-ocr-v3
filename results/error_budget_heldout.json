@@ -1,0 +1,56 @@
+{
+  "n_common_samples": 1750,
+  "per_engine": {
+    "easyocr": {
+      "cer_raw": 0.2538,
+      "cer_normalized": 0.2294,
+      "orthographic_share_of_error": 0.0963,
+      "exact_match": 0.1406,
+      "confidence_validity": {
+        "n_with_confidence": 1750,
+        "point_biserial_r": 0.17267772685221197,
+        "mean_conf_correct": 0.6811872686278121,
+        "mean_conf_incorrect": 0.5680141272479201
+      }
+    },
+    "qwen_vl": {
+      "cer_raw": 2.3729,
+      "cer_normalized": 2.347,
+      "orthographic_share_of_error": 0.0109,
+      "exact_match": 0.2943,
+      "confidence_validity": {
+        "n_with_confidence": 1750,
+        "point_biserial_r": 0.45658712328482315,
+        "mean_conf_correct": 0.5657342141114392,
+        "mean_conf_incorrect": 0.41416653984712687
+      }
+    }
+  },
+  "pairwise_agreement": {
+    "easyocr|qwen_vl": {
+      "agree": 130,
+      "agree_and_correct": 96,
+      "disagree": 1620,
+      "easyocr_wins": 789,
+      "qwen_vl_wins": 645,
+      "tie": 186
+    }
+  },
+  "oracle_arbitration_cer_normalized": 0.1449,
+  "degeneration_detectability": {
+    "easyocr": {
+      "catastrophic(cer>1)": 0,
+      "flagged_by_heuristic": 0,
+      "caught": 0,
+      "missed": 0,
+      "false_alarms_on_correct": 0
+    },
+    "qwen_vl": {
+      "catastrophic(cer>1)": 385,
+      "flagged_by_heuristic": 401,
+      "caught": 369,
+      "missed": 16,
+      "false_alarms_on_correct": 0
+    }
+  }
+}

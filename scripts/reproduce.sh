@@ -20,15 +20,32 @@ print("manifest reproduces: OK")
 PY
 
 # Baselines
-for engine in easyocr trocr qwen_vl; do
-  for split in golden dev; do
+for engine in easyocr qwen_vl; do
+  for split in golden dev heldout; do
     uv run python -m moocr.harness.evaluate \
       --engine "$engine" --manifest manifests/manifest_apti.json \
       --split "$split" --out "results/${engine}_${split}.json"
   done
 done
 
-# Error budget over golden runs
+# Frozen arbitration policy (tau=0.40, dev-tuned) simulated per split
+for split in golden dev heldout; do
+  uv run python -m moocr.harness.simulate_fusion \
+    "results/qwen_vl_${split}.json" "results/easyocr_${split}.json" \
+    --min-primary-conf 0.40 --out "results/sim_arb_tau40_${split}.json"
+done
+
+# Error budgets
 uv run python -m moocr.harness.error_budget \
-  results/easyocr_golden.json results/trocr_golden.json results/qwen_vl_golden.json \
-  --out results/error_budget_golden.json
+  results/easyocr_golden.json results/qwen_vl_golden.json \
+  --out results/error_budget_golden_2eng.json > /dev/null
+uv run python -m moocr.harness.error_budget \
+  results/easyocr_heldout.json results/qwen_vl_heldout.json \
+  --out results/error_budget_heldout.json > /dev/null
+
+# Dev-only tuning artifacts (policy sweep, corrector calibration)
+uv run python scripts/sweep_policy_dev.py
+uv run python scripts/calibrate_corrector_dev.py
+
+# Compose RESULTS.md from the artifacts
+uv run python scripts/make_results.py
