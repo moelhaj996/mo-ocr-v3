@@ -35,13 +35,13 @@ class TrOCREngine(Recognizer):
         cfg = config.trocr
         self._device = _pick_device(config.device)
         self._processor = TrOCRProcessor.from_pretrained(
-            cfg.checkpoint, revision=cfg.revision
+            cfg.checkpoint, revision=cfg.revision  # type: ignore[arg-type]
         )
         self._model = (
             VisionEncoderDecoderModel.from_pretrained(
-                cfg.checkpoint, revision=cfg.revision
+                cfg.checkpoint, revision=cfg.revision  # type: ignore[arg-type]
             )
-            .to(self._device)
+            .to(self._device)  # type: ignore[arg-type]
             .eval()
         )
         self._max_new_tokens = cfg.max_new_tokens
@@ -61,7 +61,7 @@ class TrOCREngine(Recognizer):
                 output_scores=True,
                 return_dict_in_generate=True,
             )
-        text = self._processor.batch_decode(
+        text = self._processor.batch_decode(  # type: ignore[no-untyped-call]
             out.sequences, skip_special_tokens=True
         )[0].strip()
         conf = None

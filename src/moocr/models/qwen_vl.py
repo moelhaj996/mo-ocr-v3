@@ -28,15 +28,15 @@ class QwenVLEngine(Recognizer):
         cfg = config.qwen_vl
         self._device = _pick_device(config.device)
         dtype = torch.float16 if self._device == "mps" else torch.float32
-        self._processor = AutoProcessor.from_pretrained(
+        self._processor = AutoProcessor.from_pretrained(  # type: ignore[no-untyped-call]
             cfg.checkpoint, revision=cfg.revision,
             min_pixels=64 * 28 * 28, max_pixels=640 * 28 * 28,
         )
         self._model = (
             Qwen2VLForConditionalGeneration.from_pretrained(
-                cfg.checkpoint, revision=cfg.revision, torch_dtype=dtype
+                cfg.checkpoint, revision=cfg.revision, torch_dtype=dtype  # type: ignore[arg-type]
             )
-            .to(self._device)
+            .to(self._device)  # type: ignore[arg-type]
             .eval()
         )
         self._prompt = cfg.prompt

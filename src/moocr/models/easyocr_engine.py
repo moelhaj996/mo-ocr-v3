@@ -24,7 +24,7 @@ if TYPE_CHECKING:
     from moocr.config import Config
 
 
-def order_regions_rtl(regions: list) -> list:
+def order_regions_rtl(regions: list[tuple[object, ...]]) -> list[tuple[object, ...]]:
     """Sort (bbox, text, conf) tuples into Arabic reading order.
 
     Group into horizontal bands by vertical center, then within a band sort
@@ -36,15 +36,15 @@ def order_regions_rtl(regions: list) -> list:
         xs = [p[0] for p in bbox]
         return (min(ys) + max(ys)) / 2, max(xs), max(ys) - min(ys)
 
-    annotated = [(geom(r), r) for r in regions]
+    annotated: list[tuple[tuple[float, float, float], tuple[object, ...]]] = [(geom(r), r) for r in regions]
     annotated.sort(key=lambda t: t[0][0])
-    bands: list[list] = []
+    bands: list[list[tuple[tuple[float, float, float], tuple[object, ...]]]] = []
     for (cy, _, h), region in annotated:
         if bands and abs(cy - bands[-1][0][0][0]) < max(h, 1) * 0.6:
             bands[-1].append(((cy, geom(region)[1], h), region))
         else:
             bands.append([((cy, geom(region)[1], h), region)])
-    ordered = []
+    ordered: list[tuple[object, ...]] = []
     for band in bands:
         band.sort(key=lambda t: -t[0][1])  # right edge descending
         ordered.extend(r for _, r in band)
@@ -67,7 +67,7 @@ class EasyOCREngine(Recognizer):
             return Recognition(text="", confidence=0.0, extra={"n_regions": 0})
         ordered = order_regions_rtl(regions)
         text = " ".join(str(r[1]) for r in ordered)
-        confs = [float(r[2]) for r in ordered if len(r) > 2]
+        confs = [float(r[2]) for r in ordered if len(r) > 2]  # type: ignore[arg-type]
         return Recognition(
             text=text,
             confidence=float(np.mean(confs)) if confs else None,

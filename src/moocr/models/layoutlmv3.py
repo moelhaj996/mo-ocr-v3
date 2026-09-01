@@ -24,7 +24,7 @@ class LayoutLMv3Structurer:
 
         # apply_ocr=False: our own recognizers supply words/boxes; LayoutLMv3
         # must never silently re-OCR with its default (non-Arabic) Tesseract.
-        self._processor = AutoProcessor.from_pretrained(
+        self._processor = AutoProcessor.from_pretrained(  # type: ignore[no-untyped-call]
             checkpoint, revision=revision, apply_ocr=False
         )
         self._model = AutoModel.from_pretrained(

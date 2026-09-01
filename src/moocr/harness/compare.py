@@ -16,7 +16,7 @@ from moocr.metrics import fix_break_counts, paired_bootstrap_delta
 from moocr.normalization import SCORING_V1, normalize
 
 
-def compare_runs(path_a: Path, path_b: Path) -> dict:
+def compare_runs(path_a: Path, path_b: Path) -> dict[str, object]:
     a = json.loads(path_a.read_text(encoding="utf-8"))
     b = json.loads(path_b.read_text(encoding="utf-8"))
     sa = {s["id"]: s for s in a["per_sample"]}
@@ -52,12 +52,12 @@ def main() -> None:
     text = json.dumps(result, ensure_ascii=False, indent=2)
     if args.out:
         args.out.write_text(text, encoding="utf-8")
-    d = result["delta_normalized"]
+    d: dict = result["delta_normalized"]  # type: ignore[assignment,type-arg]  # CLI display only
     print(
         f"Δ corpus-CER (A-B, normalized) = {d['delta_corpus_cer']:+.4f} "
         f"CI95 [{d['ci_95'][0]:+.4f}, {d['ci_95'][1]:+.4f}] p={d['p_two_sided']:.4f}"
     )
-    fb = result["fix_break_a_to_b"]
+    fb: dict = result["fix_break_a_to_b"]  # type: ignore[assignment,type-arg]  # CLI display only
     print(f"A→B: fixed={fb['fixed']} broke={fb['broke']} unchanged={fb['unchanged']}")
 
 

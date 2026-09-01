@@ -50,29 +50,29 @@ def _git_commit() -> str:
         return "unknown"
 
 
-def run_engine_on_split(
+def run_engine_on_split(  # noqa: C901
     engine_name: str,
     manifest_path: Path,
     split: str,
     config: Config,
     max_samples: int | None = None,
-) -> dict:
+) -> dict[str, object]:
     rows = load_split(manifest_path, split)
     if max_samples:
         rows = rows[:max_samples]
     engine = get_engine(engine_name, config)
 
-    per_sample: list[dict] = []
-    failures: list[dict] = []
+    per_sample: list[dict[str, object]] = []
+    failures: list[dict[str, object]] = []
     from PIL import Image
 
     for row in rows:
-        set_doc_id(row["id"])
+        set_doc_id(str(row["id"]))
         t0 = time.perf_counter()
         try:
-            with Image.open(row["image"]) as img:
+            with Image.open(str(row["image"])) as img:
                 converted = img.convert("RGB")
-                converted._moocr_id = row["id"]  # correlation for tests/tracing
+                converted._moocr_id = row["id"]  # type: ignore[attr-defined]  # correlation for tests/tracing
                 rec = engine.recognize(converted)
             latency = (time.perf_counter() - t0) * 1000
             per_sample.append(
@@ -83,7 +83,7 @@ def run_engine_on_split(
                     "confidence": rec.confidence,
                     "latency_ms": round(latency, 1),
                     "failed": False,
-                    **slice_of(row["truth"]),
+                    **slice_of(str(row["truth"])),
                 }
             )
         except Exception as exc:  # accounted, never silently dropped
@@ -98,7 +98,7 @@ def run_engine_on_split(
                     "confidence": None,
                     "latency_ms": round(latency, 1),
                     "failed": True,
-                    **slice_of(row["truth"]),
+                    **slice_of(str(row["truth"])),
                 }
             )
     set_doc_id("-")
@@ -109,27 +109,27 @@ def _score_run(
     engine_name: str,
     split: str,
     manifest_path: str,
-    per_sample: list[dict],
-    failures: list[dict],
+    per_sample: list[dict[str, object]],
+    failures: list[dict[str, object]],
     config: Config,
-) -> dict:
-    refs_raw = [s["truth"] for s in per_sample]
-    hyps_raw = [s["pred"] for s in per_sample]
+) -> dict[str, object]:
+    refs_raw = [str(s["truth"]) for s in per_sample]
+    hyps_raw = [str(s["pred"]) for s in per_sample]
     refs_norm = [normalize(r, SCORING_V1) for r in refs_raw]
     hyps_norm = [normalize(h, SCORING_V1) for h in hyps_raw]
 
     ok = [s for s in per_sample if not s["failed"]]
-    scores: dict = {
+    scores: dict[str, object] = {
         "raw": vars(score_corpus(hyps_raw, refs_raw)),
         "normalized": vars(score_corpus(hyps_norm, refs_norm)),
     }
     if failures and ok:
         scores["excluding_failures"] = {
-            "raw": vars(score_corpus([s["pred"] for s in ok], [s["truth"] for s in ok])),
+            "raw": vars(score_corpus([str(s["pred"]) for s in ok], [str(s["truth"]) for s in ok])),
             "normalized": vars(
                 score_corpus(
-                    [normalize(s["pred"], SCORING_V1) for s in ok],
-                    [normalize(s["truth"], SCORING_V1) for s in ok],
+                    [normalize(str(s["pred"]), SCORING_V1) for s in ok],
+                    [normalize(str(s["truth"]), SCORING_V1) for s in ok],
                 )
             ),
         }
@@ -143,15 +143,15 @@ def _score_run(
     else:
         scores["wer"] = "suppressed: all references are single words; WER degenerates to exact-match"
 
-    slices: dict = {}
+    slices: dict[str, object] = {}
     for key in ("len_bucket", "has_digit"):
         for value in sorted({str(s[key]) for s in per_sample}):
             group = [s for s in per_sample if str(s[key]) == value]
-            gh = [normalize(s["pred"], SCORING_V1) for s in group]
-            gr = [normalize(s["truth"], SCORING_V1) for s in group]
+            gh = [normalize(str(s["pred"]), SCORING_V1) for s in group]
+            gr = [normalize(str(s["truth"]), SCORING_V1) for s in group]
             slices[f"{key}={value}"] = {"n": len(group), **vars(score_corpus(gh, gr))}
 
-    lat = sorted(s["latency_ms"] for s in per_sample)
+    lat = sorted(float(s["latency_ms"]) for s in per_sample)  # type: ignore[arg-type]
     return {
         "meta": {
             "engine": engine_name,
@@ -182,7 +182,7 @@ def _score_run(
     }
 
 
-def _engine_cfg(engine_name: str, config: Config) -> dict:
+def _engine_cfg(engine_name: str, config: Config) -> dict[str, object]:
     return {
         "easyocr": lambda: config.easyocr.model_dump(),
         "trocr": lambda: config.trocr.model_dump(),
@@ -208,7 +208,7 @@ def main() -> None:
     args.out.write_text(
         json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8"
     )
-    s = result["scores"]
+    s: dict = result["scores"]  # type: ignore[assignment,type-arg]  # CLI display only
     print(
         f"{args.engine}/{args.split}: n={result['n_samples']} "
         f"failures={result['n_failures']} "

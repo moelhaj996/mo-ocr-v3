@@ -21,7 +21,7 @@ class FakeRecognizer(Recognizer):
 
     def recognize(self, image: "Image.Image") -> Recognition:
         key = getattr(image, "_moocr_id", None) or (
-            image.filename.rsplit("/", 1)[-1].rsplit(".", 1)[0]
+            str(image.filename).rsplit("/", 1)[-1].rsplit(".", 1)[0]  # type: ignore[attr-defined]
             if getattr(image, "filename", "")
             else ""
         )
