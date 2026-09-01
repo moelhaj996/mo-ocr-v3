@@ -1,0 +1,721 @@
+{
+  "meta": {
+    "engine": "easyocr",
+    "engine_config": {
+      "languages": [
+        "ar"
+      ],
+      "gpu": false
+    },
+    "split": "golden",
+    "manifest": "manifests/manifest_apti.json",
+    "norm_version": "1.0.0",
+    "scoring_profile": "scoring_v1",
+    "seed": 20260901,
+    "moocr_version": "3.0.0",
+    "git_commit": "45b837930984d3a0938d61be8d3ea6c784cd67b2",
+    "platform": "macOS-26.6.2-arm64-arm-64bit",
+    "timestamp": "2026-09-01T18:29:23"
+  },
+  "n_samples": 50,
+  "n_failures": 0,
+  "failures": [],
+  "scores": {
+    "raw": {
+      "corpus_cer": 0.25906735751295334,
+      "macro_cer": 0.2583333333333333,
+      "exact_match": 0.1,
+      "n": 50
+    },
+    "normalized": {
+      "corpus_cer": 0.23316062176165803,
+      "macro_cer": 0.23353968253968255,
+      "exact_match": 0.12,
+      "n": 50
+    },
+    "wer": "suppressed: all references are single words; WER degenerates to exact-match"
+  },
+  "bidi_check": {
+    "n_reversed_better": 0,
+    "indices": []
+  },
+  "slices": {
+    "len_bucket=long(>=9)": {
+      "n": 9,
+      "corpus_cer": 0.25882352941176473,
+      "macro_cer": 0.2617283950617284,
+      "exact_match": 0.0
+    },
+    "len_bucket=medium(5-8)": {
+      "n": 41,
+      "corpus_cer": 0.22591362126245848,
+      "macro_cer": 0.2273519163763066,
+      "exact_match": 0.14634146341463414
+    },
+    "has_digit=False": {
+      "n": 50,
+      "corpus_cer": 0.23316062176165803,
+      "macro_cer": 0.23353968253968255,
+      "exact_match": 0.12
+    }
+  },
+  "confusions_top30": [
+    {
+      "ref": "ي",
+      "hyp": "ب",
+      "count": 16
+    },
+    {
+      "ref": "ت",
+      "hyp": "ن",
+      "count": 9
+    },
+    {
+      "ref": "∅",
+      "hyp": "ب",
+      "count": 5
+    },
+    {
+      "ref": "ئ",
+      "hyp": "ل",
+      "count": 4
+    },
+    {
+      "ref": "ق",
+      "hyp": "ع",
+      "count": 4
+    },
+    {
+      "ref": "ن",
+      "hyp": "ل",
+      "count": 4
+    },
+    {
+      "ref": "ت",
+      "hyp": "ل",
+      "count": 4
+    },
+    {
+      "ref": "ت",
+      "hyp": "ذ",
+      "count": 3
+    },
+    {
+      "ref": "ي",
+      "hyp": "∅",
+      "count": 3
+    },
+    {
+      "ref": "∅",
+      "hyp": "ل",
+      "count": 3
+    },
+    {
+      "ref": "∅",
+      "hyp": " ",
+      "count": 3
+    },
+    {
+      "ref": "ه",
+      "hyp": "∅",
+      "count": 2
+    },
+    {
+      "ref": "ك",
+      "hyp": "ل",
+      "count": 2
+    },
+    {
+      "ref": "ق",
+      "hyp": "ف",
+      "count": 2
+    },
+    {
+      "ref": "ض",
+      "hyp": "ذ",
+      "count": 2
+    },
+    {
+      "ref": "ت",
+      "hyp": "د",
+      "count": 2
+    },
+    {
+      "ref": "ز",
+      "hyp": "ر",
+      "count": 2
+    },
+    {
+      "ref": "خ",
+      "hyp": "ح",
+      "count": 2
+    },
+    {
+      "ref": "ف",
+      "hyp": "ء",
+      "count": 2
+    },
+    {
+      "ref": "ت",
+      "hyp": "∅",
+      "count": 2
+    },
+    {
+      "ref": "ث",
+      "hyp": "ذ",
+      "count": 1
+    },
+    {
+      "ref": "م",
+      "hyp": " ",
+      "count": 1
+    },
+    {
+      "ref": "ي",
+      "hyp": "ل",
+      "count": 1
+    },
+    {
+      "ref": "ث",
+      "hyp": "ن",
+      "count": 1
+    },
+    {
+      "ref": "ق",
+      "hyp": "ذ",
+      "count": 1
+    },
+    {
+      "ref": "ي",
+      "hyp": "غ",
+      "count": 1
+    },
+    {
+      "ref": "ئ",
+      "hyp": "∅",
+      "count": 1
+    },
+    {
+      "ref": "ن",
+      "hyp": " ",
+      "count": 1
+    },
+    {
+      "ref": "ص",
+      "hyp": "ل",
+      "count": 1
+    },
+    {
+      "ref": "∅",
+      "hyp": "م",
+      "count": 1
+    }
+  ],
+  "latency_ms": {
+    "median": 59.4,
+    "p95": 74.0,
+    "mean": 61.9
+  },
+  "per_sample": [
+    {
+      "id": "word_00144",
+      "truth": "الدوائر",
+      "pred": "الدوالر",
+      "confidence": 0.7093985653860521,
+      "latency_ms": 121.1,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00186",
+      "truth": "ومعالجتها",
+      "pred": "ومعالجذها",
+      "confidence": 0.5499846706203882,
+      "latency_ms": 70.3,
+      "failed": false,
+      "len_bucket": "long(>=9)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00215",
+      "truth": "ليفونيا",
+      "pred": "لبفونبا",
+      "confidence": 0.679585149359397,
+      "latency_ms": 49.1,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00239",
+      "truth": "المبكرة",
+      "pred": "المبكر",
+      "confidence": 0.9877311167637554,
+      "latency_ms": 48.1,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00252",
+      "truth": "والحياكة",
+      "pred": "والحباله",
+      "confidence": 0.49931166789152487,
+      "latency_ms": 59.1,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00264",
+      "truth": "الثقافي",
+      "pred": "الذعاف",
+      "confidence": 0.22012697696116726,
+      "latency_ms": 57.8,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00284",
+      "truth": "الإسرائيلي",
+      "pred": "الإسرالبلى",
+      "confidence": 0.943347987449549,
+      "latency_ms": 59.6,
+      "failed": false,
+      "len_bucket": "long(>=9)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00315",
+      "truth": "متلقيها",
+      "pred": "منلفبها",
+      "confidence": 0.8666045740637486,
+      "latency_ms": 59.2,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00316",
+      "truth": "باشتداد",
+      "pred": "باشنداد",
+      "confidence": 0.8398903291328494,
+      "latency_ms": 58.7,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00341",
+      "truth": "بانضمام",
+      "pred": "بالذبمام",
+      "confidence": 0.28461559169128403,
+      "latency_ms": 60.3,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00376",
+      "truth": "التأسيسي",
+      "pred": "الداسبسى",
+      "confidence": 0.4848728885601154,
+      "latency_ms": 61.1,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00403",
+      "truth": "الحضرمي",
+      "pred": "الحذر للب",
+      "confidence": 0.27377300017399653,
+      "latency_ms": 130.2,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00436",
+      "truth": "الدراسية",
+      "pred": "الدرا سبة",
+      "confidence": 0.3968465622098042,
+      "latency_ms": 70.1,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00645",
+      "truth": "بالاضافة",
+      "pred": "بالاضافة",
+      "confidence": 0.34007179016204925,
+      "latency_ms": 60.5,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00657",
+      "truth": "بالألحان",
+      "pred": "بالالحان",
+      "confidence": 0.7369183204170545,
+      "latency_ms": 50.8,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00658",
+      "truth": "المعدلة",
+      "pred": "المعدلة",
+      "confidence": 0.3170739996565355,
+      "latency_ms": 59.4,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00684",
+      "truth": "القرارات",
+      "pred": "العراران",
+      "confidence": 0.41141783836061824,
+      "latency_ms": 59.4,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00748",
+      "truth": "واتفاقه",
+      "pred": "والفاقه",
+      "confidence": 0.5439091584080312,
+      "latency_ms": 57.9,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00751",
+      "truth": "المفتوحة",
+      "pred": "المفذوحة",
+      "confidence": 0.613795926430522,
+      "latency_ms": 58.7,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00790",
+      "truth": "والثامن",
+      "pred": "والنامن",
+      "confidence": 0.4616008965663446,
+      "latency_ms": 58.4,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00811",
+      "truth": "الأمازيغ",
+      "pred": "الأماربغ",
+      "confidence": 0.5551863117207817,
+      "latency_ms": 47.9,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00830",
+      "truth": "التصديع",
+      "pred": "النصديع",
+      "confidence": 0.6158603405248836,
+      "latency_ms": 59.1,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00854",
+      "truth": "والخريف",
+      "pred": "والحريء",
+      "confidence": 0.5665123701490334,
+      "latency_ms": 59.3,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00896",
+      "truth": "التنقيبات",
+      "pred": "النذغببان",
+      "confidence": 0.6192698385464982,
+      "latency_ms": 59.7,
+      "failed": false,
+      "len_bucket": "long(>=9)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00900",
+      "truth": "والمشروبات",
+      "pred": "والمشروبان",
+      "confidence": 0.9833568499359878,
+      "latency_ms": 74.0,
+      "failed": false,
+      "len_bucket": "long(>=9)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00912",
+      "truth": "متصرفية",
+      "pred": "منصر فبة",
+      "confidence": 0.1328203030714775,
+      "latency_ms": 59.5,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00932",
+      "truth": "البوتاس",
+      "pred": "البولاس",
+      "confidence": 0.7176414905878644,
+      "latency_ms": 57.3,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00944",
+      "truth": "للموائل",
+      "pred": "للموالل",
+      "confidence": 0.6393174119634288,
+      "latency_ms": 47.2,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00987",
+      "truth": "زمرةانصاف",
+      "pred": "رمرةا لماء",
+      "confidence": 0.24881750463090788,
+      "latency_ms": 59.3,
+      "failed": false,
+      "len_bucket": "long(>=9)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01029",
+      "truth": "التراتيل",
+      "pred": "الذرالبل",
+      "confidence": 0.9325714036064071,
+      "latency_ms": 61.5,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01103",
+      "truth": "بالفنلندية",
+      "pred": "بالفنلند يه",
+      "confidence": 0.25932348641955644,
+      "latency_ms": 72.9,
+      "failed": false,
+      "len_bucket": "long(>=9)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01182",
+      "truth": "والأردن",
+      "pred": "والأردن",
+      "confidence": 0.5845924777839564,
+      "latency_ms": 48.6,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01184",
+      "truth": "الانتقامية",
+      "pred": "الادعامبة",
+      "confidence": 0.4272693983115477,
+      "latency_ms": 60.7,
+      "failed": false,
+      "len_bucket": "long(>=9)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01187",
+      "truth": "بالتصميم",
+      "pred": "بالنصمبم",
+      "confidence": 0.74339949901157,
+      "latency_ms": 60.6,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01188",
+      "truth": "الأتحاد",
+      "pred": "الالحاد",
+      "confidence": 0.5545604872727012,
+      "latency_ms": 58.6,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01256",
+      "truth": "الانشقاق",
+      "pred": "اانشعاف",
+      "confidence": 0.47406064663537917,
+      "latency_ms": 59.5,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01279",
+      "truth": "الأمثلة",
+      "pred": "الاملل",
+      "confidence": 0.533519791695356,
+      "latency_ms": 58.3,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01315",
+      "truth": "يوطوبية",
+      "pred": "بوطوببة",
+      "confidence": 0.23787264993206755,
+      "latency_ms": 59.1,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01375",
+      "truth": "الرائدة",
+      "pred": "الرالدة",
+      "confidence": 0.7310025577965167,
+      "latency_ms": 58.5,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01430",
+      "truth": "للتسلية",
+      "pred": "للنسلب ",
+      "confidence": 0.24063371353813867,
+      "latency_ms": 57.5,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01440",
+      "truth": "الحلاني",
+      "pred": "الحلالى",
+      "confidence": 0.4015922121228218,
+      "latency_ms": 58.9,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01591",
+      "truth": "المخزنة",
+      "pred": "المحزلة",
+      "confidence": 0.3545469810575131,
+      "latency_ms": 60.8,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01626",
+      "truth": "ومعظمهم",
+      "pred": "ومعظمهم",
+      "confidence": 0.7655626035846335,
+      "latency_ms": 71.2,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01642",
+      "truth": "باستقلاله",
+      "pred": "باسدعلاله",
+      "confidence": 0.3452992901313821,
+      "latency_ms": 59.1,
+      "failed": false,
+      "len_bucket": "long(>=9)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01663",
+      "truth": "تجريبيا",
+      "pred": "لجربببا",
+      "confidence": 0.5823398109622884,
+      "latency_ms": 58.1,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01725",
+      "truth": "النظائر",
+      "pred": "الذظالر",
+      "confidence": 0.3584244839702029,
+      "latency_ms": 60.6,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01813",
+      "truth": "والثعالب",
+      "pred": "واللعالب",
+      "confidence": 0.9326308814086217,
+      "latency_ms": 59.4,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01823",
+      "truth": "كاوريسمكي",
+      "pred": "كاوريسملى",
+      "confidence": 0.6599293833904954,
+      "latency_ms": 59.6,
+      "failed": false,
+      "len_bucket": "long(>=9)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01903",
+      "truth": "العمونية",
+      "pred": "العمولبة",
+      "confidence": 0.6184217918569478,
+      "latency_ms": 59.8,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01954",
+      "truth": "المهجرين",
+      "pred": "المهجرين",
+      "confidence": 0.916062595143291,
+      "latency_ms": 60.7,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    }
+  ]
+}

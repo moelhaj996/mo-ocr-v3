@@ -1,0 +1,727 @@
+{
+  "meta": {
+    "engine": "qwen_vl",
+    "engine_config": {
+      "checkpoint": "Qwen/Qwen2-VL-2B-Instruct",
+      "revision": null,
+      "max_new_tokens": 64,
+      "prompt": "انسخ النص العربي الموجود في الصورة حرفياً كما هو، بدون أي شرح أو تعليق أو علامات تنسيق."
+    },
+    "split": "golden",
+    "manifest": "manifests/manifest_apti.json",
+    "norm_version": "1.0.0",
+    "scoring_profile": "scoring_v1",
+    "seed": 20260901,
+    "moocr_version": "3.0.0",
+    "git_commit": "45b837930984d3a0938d61be8d3ea6c784cd67b2",
+    "platform": "macOS-26.6.2-arm64-arm-64bit",
+    "timestamp": "2026-09-01T18:30:48"
+  },
+  "n_samples": 50,
+  "n_failures": 0,
+  "failures": [],
+  "scores": {
+    "raw": {
+      "corpus_cer": 2.655440414507772,
+      "macro_cer": 2.568230158730158,
+      "exact_match": 0.3,
+      "n": 50
+    },
+    "normalized": {
+      "corpus_cer": 2.6321243523316062,
+      "macro_cer": 2.5450793650793653,
+      "exact_match": 0.32,
+      "n": 50
+    },
+    "wer": "suppressed: all references are single words; WER degenerates to exact-match"
+  },
+  "bidi_check": {
+    "n_reversed_better": 5,
+    "indices": [
+      5,
+      23,
+      24,
+      42,
+      49
+    ]
+  },
+  "slices": {
+    "len_bucket=long(>=9)": {
+      "n": 9,
+      "corpus_cer": 5.2823529411764705,
+      "macro_cer": 5.34567901234568,
+      "exact_match": 0.2222222222222222
+    },
+    "len_bucket=medium(5-8)": {
+      "n": 41,
+      "corpus_cer": 1.8837209302325582,
+      "macro_cer": 1.9303135888501741,
+      "exact_match": 0.34146341463414637
+    },
+    "has_digit=False": {
+      "n": 50,
+      "corpus_cer": 2.6321243523316062,
+      "macro_cer": 2.5450793650793653,
+      "exact_match": 0.32
+    }
+  },
+  "confusions_top30": [
+    {
+      "ref": "∅",
+      "hyp": " ",
+      "count": 161
+    },
+    {
+      "ref": "∅",
+      "hyp": "ا",
+      "count": 113
+    },
+    {
+      "ref": "∅",
+      "hyp": "ل",
+      "count": 91
+    },
+    {
+      "ref": "∅",
+      "hyp": "ي",
+      "count": 52
+    },
+    {
+      "ref": "∅",
+      "hyp": "ه",
+      "count": 48
+    },
+    {
+      "ref": "∅",
+      "hyp": "ك",
+      "count": 47
+    },
+    {
+      "ref": "∅",
+      "hyp": "ب",
+      "count": 33
+    },
+    {
+      "ref": "∅",
+      "hyp": "و",
+      "count": 32
+    },
+    {
+      "ref": "∅",
+      "hyp": "ن",
+      "count": 32
+    },
+    {
+      "ref": "∅",
+      "hyp": "م",
+      "count": 32
+    },
+    {
+      "ref": "∅",
+      "hyp": "ت",
+      "count": 27
+    },
+    {
+      "ref": "∅",
+      "hyp": "ع",
+      "count": 23
+    },
+    {
+      "ref": "∅",
+      "hyp": "ر",
+      "count": 20
+    },
+    {
+      "ref": "∅",
+      "hyp": "س",
+      "count": 17
+    },
+    {
+      "ref": "∅",
+      "hyp": "\"",
+      "count": 16
+    },
+    {
+      "ref": "∅",
+      "hyp": "ف",
+      "count": 13
+    },
+    {
+      "ref": "∅",
+      "hyp": ".",
+      "count": 12
+    },
+    {
+      "ref": "∅",
+      "hyp": "ج",
+      "count": 12
+    },
+    {
+      "ref": "∅",
+      "hyp": "د",
+      "count": 11
+    },
+    {
+      "ref": "∅",
+      "hyp": "ط",
+      "count": 10
+    },
+    {
+      "ref": "∅",
+      "hyp": ":",
+      "count": 10
+    },
+    {
+      "ref": "∅",
+      "hyp": "،",
+      "count": 9
+    },
+    {
+      "ref": "∅",
+      "hyp": "غ",
+      "count": 9
+    },
+    {
+      "ref": "∅",
+      "hyp": "ص",
+      "count": 9
+    },
+    {
+      "ref": "∅",
+      "hyp": "し",
+      "count": 8
+    },
+    {
+      "ref": "∅",
+      "hyp": "i",
+      "count": 8
+    },
+    {
+      "ref": "∅",
+      "hyp": "申",
+      "count": 7
+    },
+    {
+      "ref": "و",
+      "hyp": "∅",
+      "count": 7
+    },
+    {
+      "ref": "∅",
+      "hyp": "ح",
+      "count": 6
+    },
+    {
+      "ref": "∅",
+      "hyp": "ق",
+      "count": 6
+    }
+  ],
+  "latency_ms": {
+    "median": 471.1,
+    "p95": 1462.6,
+    "mean": 780.3
+  },
+  "per_sample": [
+    {
+      "id": "word_00144",
+      "truth": "الدوائر",
+      "pred": "الدوائر",
+      "confidence": 0.6087066531181335,
+      "latency_ms": 4539.1,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00186",
+      "truth": "ومعالجتها",
+      "pred": "申しك، ولكنني لا أستطيع فهم اللغة العربية. هل يمكنك التوضيح أو تقديم المزيد من المعلومات؟",
+      "confidence": 0.3642577528953552,
+      "latency_ms": 1383.9,
+      "failed": false,
+      "len_bucket": "long(>=9)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00215",
+      "truth": "ليفونيا",
+      "pred": "ليفونيا",
+      "confidence": 0.6875556707382202,
+      "latency_ms": 469.2,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00239",
+      "truth": "المبكرة",
+      "pred": "المبكرة",
+      "confidence": 0.5935728549957275,
+      "latency_ms": 441.1,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00252",
+      "truth": "والحياكة",
+      "pred": "الحياة والحب",
+      "confidence": 0.45011305809020996,
+      "latency_ms": 482.7,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00264",
+      "truth": "الثقافي",
+      "pred": "申しك، ولكنني لا أستطيع فهم اللغة العربية. هل يمكنك كتابة السؤال أو السؤال بشكل أكثر تفصيلاً؟",
+      "confidence": 0.36819782853126526,
+      "latency_ms": 1446.5,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00284",
+      "truth": "الإسرائيلي",
+      "pred": "申しك، ولكنني لا أستطيع فهم اللغة العربية. هل يمكنك التوضيح أو تقديم المزيد من المعلومات؟",
+      "confidence": 0.3671663999557495,
+      "latency_ms": 1259.5,
+      "failed": false,
+      "len_bucket": "long(>=9)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00315",
+      "truth": "متلقيها",
+      "pred": "申しكليها",
+      "confidence": 0.25648701190948486,
+      "latency_ms": 455.1,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00316",
+      "truth": "باشتداد",
+      "pred": "باشتعاد",
+      "confidence": 0.3037458658218384,
+      "latency_ms": 463.0,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00341",
+      "truth": "بانضمام",
+      "pred": "بانصمام",
+      "confidence": 0.3342702388763428,
+      "latency_ms": 434.2,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00376",
+      "truth": "التأسيسي",
+      "pred": "التأسيسي",
+      "confidence": 0.5401811599731445,
+      "latency_ms": 469.4,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00403",
+      "truth": "الحضرمي",
+      "pred": "الخضرمي",
+      "confidence": 0.4431394338607788,
+      "latency_ms": 488.1,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00436",
+      "truth": "الدراسية",
+      "pred": "الدراسية",
+      "confidence": 0.5847448110580444,
+      "latency_ms": 446.9,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00645",
+      "truth": "بالاضافة",
+      "pred": "بالإضافة",
+      "confidence": 0.6087446212768555,
+      "latency_ms": 467.4,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00657",
+      "truth": "بالألحان",
+      "pred": "بالألحان",
+      "confidence": 0.5510078072547913,
+      "latency_ms": 427.2,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00658",
+      "truth": "المعدلة",
+      "pred": "العربية",
+      "confidence": 0.29547587037086487,
+      "latency_ms": 442.7,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00684",
+      "truth": "القرارات",
+      "pred": "القرارات",
+      "confidence": 0.6142039895057678,
+      "latency_ms": 430.9,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00748",
+      "truth": "واتفاقه",
+      "pred": "التفاصيل المطلوبة لمعرفة ما إذا كانت الصورة مكتوبة باللغة العربية أو غيرها من اللغات.",
+      "confidence": 0.37834852933883667,
+      "latency_ms": 1306.7,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00751",
+      "truth": "المفتوحة",
+      "pred": "المنوفحة",
+      "confidence": 0.2369469553232193,
+      "latency_ms": 514.1,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00790",
+      "truth": "والثامن",
+      "pred": "الثاني",
+      "confidence": 0.3080645799636841,
+      "latency_ms": 417.8,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00811",
+      "truth": "الأمازيغ",
+      "pred": "الأمازيغ",
+      "confidence": 0.4170762300491333,
+      "latency_ms": 455.3,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00830",
+      "truth": "التصديع",
+      "pred": "التصديع",
+      "confidence": 0.49468475580215454,
+      "latency_ms": 471.6,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00854",
+      "truth": "والخريف",
+      "pred": "الخريف",
+      "confidence": 0.5343719720840454,
+      "latency_ms": 445.0,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00896",
+      "truth": "التنقيبات",
+      "pred": "申しك، ولكنني لا أستطيع فهم اللغة العربية. هل يمكنك كتابة السؤال أو السؤال بشكل أكثر تفصيلاً؟",
+      "confidence": 0.3680814504623413,
+      "latency_ms": 1419.8,
+      "failed": false,
+      "len_bucket": "long(>=9)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00900",
+      "truth": "والمشروبات",
+      "pred": "申しك، ولكنني لا أستطيع فهم اللغة العربية. هل يمكنك التوضيح أو تقديم المزيد من المعلومات؟",
+      "confidence": 0.3604847490787506,
+      "latency_ms": 1210.0,
+      "failed": false,
+      "len_bucket": "long(>=9)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00912",
+      "truth": "متصرفية",
+      "pred": "申しكرًا، ولكنني لا أستطيع مساعدتك في ذلك.",
+      "confidence": 0.45496073365211487,
+      "latency_ms": 884.5,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00932",
+      "truth": "البوتاس",
+      "pred": "البواس",
+      "confidence": 0.3346650004386902,
+      "latency_ms": 416.2,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00944",
+      "truth": "للموائل",
+      "pred": "للموايل",
+      "confidence": 0.4513913691043854,
+      "latency_ms": 498.7,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00987",
+      "truth": "زمرةانصاف",
+      "pred": "申しكرًا، ولكنني لا أستطيع مساعدتك في ذلك.",
+      "confidence": 0.48546385765075684,
+      "latency_ms": 835.6,
+      "failed": false,
+      "len_bucket": "long(>=9)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01029",
+      "truth": "التراتيل",
+      "pred": "العراق",
+      "confidence": 0.21803255379199982,
+      "latency_ms": 384.9,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01103",
+      "truth": "بالفنلندية",
+      "pred": "الفنلندية",
+      "confidence": 0.608343780040741,
+      "latency_ms": 529.5,
+      "failed": false,
+      "len_bucket": "long(>=9)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01182",
+      "truth": "والأردن",
+      "pred": "الإجابة: \"الإجابة: \"الإجابة: \"الإجابة: \"الإجابة: \"الإجابة: \"الإجابة: \"الإجابة: \"الإجابة: \"الإجابة: \"الإجابة",
+      "confidence": 0.7589400410652161,
+      "latency_ms": 2516.7,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01184",
+      "truth": "الانتقامية",
+      "pred": "الانتقامية",
+      "confidence": 0.3973020017147064,
+      "latency_ms": 569.5,
+      "failed": false,
+      "len_bucket": "long(>=9)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01187",
+      "truth": "بالتصميم",
+      "pred": "التصميم",
+      "confidence": 0.3125198185443878,
+      "latency_ms": 397.4,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01188",
+      "truth": "الأتحاد",
+      "pred": "الأنحاد",
+      "confidence": 0.45894429087638855,
+      "latency_ms": 461.7,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01256",
+      "truth": "الانشقاق",
+      "pred": "الانشقاق",
+      "confidence": 0.4232574701309204,
+      "latency_ms": 467.4,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01279",
+      "truth": "الأمثلة",
+      "pred": "الأسماك",
+      "confidence": 0.3082243800163269,
+      "latency_ms": 492.6,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01315",
+      "truth": "يوطوبية",
+      "pred": "يوجد في الصورة نص عربي يكتب \"يوطوبية\" بطريقة مكتوبة بشكل صارم.",
+      "confidence": 0.3624780476093292,
+      "latency_ms": 1277.0,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01375",
+      "truth": "الرائدة",
+      "pred": "الرائدة",
+      "confidence": 0.6448771357536316,
+      "latency_ms": 520.6,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01430",
+      "truth": "للتسلية",
+      "pred": "التسليمة",
+      "confidence": 0.3546581566333771,
+      "latency_ms": 455.8,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01440",
+      "truth": "الحلاني",
+      "pred": "الحلالي",
+      "confidence": 0.5535030961036682,
+      "latency_ms": 463.5,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01591",
+      "truth": "المخزنة",
+      "pred": "المحزنة",
+      "confidence": 0.5249852538108826,
+      "latency_ms": 466.3,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01626",
+      "truth": "ومعظمهم",
+      "pred": "النص العربي الموجود في الصورة حرفياً كما هو، بدون أي شرح أو تعليق أو علامات تنسيق.",
+      "confidence": 0.8113659620285034,
+      "latency_ms": 1462.6,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01642",
+      "truth": "باستقلاله",
+      "pred": "باستقلاله",
+      "confidence": 0.5092726349830627,
+      "latency_ms": 520.4,
+      "failed": false,
+      "len_bucket": "long(>=9)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01663",
+      "truth": "تجريبيا",
+      "pred": "لجريبيا",
+      "confidence": 0.4179985225200653,
+      "latency_ms": 449.3,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01725",
+      "truth": "النظائر",
+      "pred": "النظائر",
+      "confidence": 0.4578479826450348,
+      "latency_ms": 461.1,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01813",
+      "truth": "والثعالب",
+      "pred": "العابد",
+      "confidence": 0.28451961278915405,
+      "latency_ms": 471.1,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01823",
+      "truth": "كاوريسمكي",
+      "pred": "The text in the image is in Arabic and reads \"كوريسمكي\" which translates to \"Korysmy\" in English.",
+      "confidence": 0.4947029948234558,
+      "latency_ms": 1306.9,
+      "failed": false,
+      "len_bucket": "long(>=9)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01903",
+      "truth": "العمونية",
+      "pred": "العمونية",
+      "confidence": 0.6512448787689209,
+      "latency_ms": 470.1,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_01954",
+      "truth": "المهجرين",
+      "pred": "申しك، ولكنني لا أستطيع فهم اللغة العربية. هل يمكنك كتابة السؤال أو السؤال بشكل أكثر تفصيلاً؟",
+      "confidence": 0.37332290410995483,
+      "latency_ms": 1449.2,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    }
+  ]
+}

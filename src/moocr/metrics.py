@@ -49,9 +49,7 @@ def cer(hyp: str, ref: str) -> float:
 
 def wer(hyp: str, ref: str) -> float:
     rt, ht = ref.split(), hyp.split()
-    if a := levenshtein_tokens(rt, ht):
-        return a / max(len(rt), 1)
-    return 0.0
+    return levenshtein_tokens(rt, ht) / max(len(rt), 1)
 
 
 def levenshtein_tokens(a: Sequence[str], b: Sequence[str]) -> int:
@@ -86,7 +84,7 @@ def score_corpus(hyps: Sequence[str], refs: Sequence[str]) -> CorpusScore:
     )
 
 
-def bidi_check(hyps: Sequence[str], refs: Sequence[str]) -> dict:
+def bidi_check(hyps: Sequence[str], refs: Sequence[str]) -> dict[str, object]:
     """Protocol §3: count samples where the REVERSED hypothesis scores better.
 
     A high count means text is being stored in visual order somewhere —
@@ -105,8 +103,7 @@ def paired_bootstrap_delta(
     hyps_b: Sequence[str],
     refs: Sequence[str],
     n_resamples: int = 10_000,
-    seed: int = 20260901,
-) -> dict:
+:
     """Paired bootstrap CI for corpus-CER(A) - corpus-CER(B).
 
     Negative delta means system A is better. The same resampled indices are
@@ -138,9 +135,9 @@ def paired_bootstrap_delta(
 
 def confusion_report(
     hyps: Sequence[str], refs: Sequence[str], top_n: int = 30
-) -> list[dict]:
+) -> list[dict[str, object]]:
     """Top character substitutions/insertions/deletions by frequency (ref->hyp)."""
-    counts: Counter = Counter()
+    counts: Counter[tuple[str, str]] = Counter()
     for h, r in zip(hyps, refs):
         for tag, i1, i2, j1, j2 in difflib.SequenceMatcher(
             None, r, h, autojunk=False
@@ -166,9 +163,7 @@ def confusion_report(
     ]
 
 
-def fix_break_counts(
-    before: Sequence[str], after: Sequence[str], refs: Sequence[str]
-) -> dict:
+:
     """Protocol §4: for a correction stage, count fixes AND breaks.
 
     fixed  = sample CER strictly decreased
