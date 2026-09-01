@@ -164,7 +164,9 @@ def confusion_report(
     ]
 
 
-:
+def fix_break_counts(
+    before: Sequence[str], after: Sequence[str], refs: Sequence[str]
+) -> dict[str, int]:
     """Protocol §4: for a correction stage, count fixes AND breaks.
 
     fixed  = sample CER strictly decreased
