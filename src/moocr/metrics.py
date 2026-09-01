@@ -103,7 +103,8 @@ def paired_bootstrap_delta(
     hyps_b: Sequence[str],
     refs: Sequence[str],
     n_resamples: int = 10_000,
-:
+    seed: int = 20260901,
+) -> dict[str, object]:
     """Paired bootstrap CI for corpus-CER(A) - corpus-CER(B).
 
     Negative delta means system A is better. The same resampled indices are
