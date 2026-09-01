@@ -38,12 +38,15 @@ def degenerate_flag(pred: str, ref_len_hint: int | None = None) -> bool:
     Flags: output much longer than a plausible word-crop transcription,
     or containing Latin/CJK runs, or echoing instruction-like phrases.
     """
-    if len(pred) > 40:
+    # Thresholds set on the dev split (0 false alarms on correct output,
+    # 49/49 catastrophes caught); len>30 and >=2 non-Arabic letters also
+    # close the refusal-leak class observed in the golden regression set.
+    if len(pred) > 30:
         return True
     non_arabic = sum(
         1 for c in pred if c.isalpha() and not ("؀" <= c <= "ۿ")
     )
-    return non_arabic >= 3
+    return non_arabic >= 2
 
 
 def build_budget(paths: list[Path]) -> dict[str, object]:

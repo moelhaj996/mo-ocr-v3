@@ -8,9 +8,9 @@
     "scoring_profile": "scoring_v1",
     "seed": 20260901,
     "moocr_version": "3.0.0",
-    "git_commit": "707094cf875a2b1de42992ac7d85524b7d63817f",
+    "git_commit": "16f7d3bb664ff678f2abc983d2a82913a710ee34",
     "platform": "macOS-26.6.2-arm64-arm-64bit",
-    "timestamp": "2026-09-01T18:48:43"
+    "timestamp": "2026-09-01T18:49:53"
   },
   "n_samples": 200,
   "n_failures": 0,
