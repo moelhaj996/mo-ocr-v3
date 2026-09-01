@@ -1,0 +1,16 @@
+{
+  "purpose": "Select an Arabic TrOCR checkpoint (no official one exists). Screened on the first 10 golden samples; a candidate needed to be within reach of EasyOCR (0.2332 dev/golden corpus CER) to justify a full run.",
+  "norm_version": "1.1.0",
+  "screened": [
+    {"checkpoint": "RayR1/trocr-base-arabic-handwritten", "cer_norm_10": 0.8947, "exact": 0.0, "failure_mode": "unrelated text (handwriting-trained, no transfer to printed)"},
+    {"checkpoint": "gagan3012/ArOCR", "cer_norm_10": 0.7368, "exact": 0.0, "failure_mode": "fluent but wrong words"},
+    {"checkpoint": "ziad99/trocr2-arabic", "cer_norm_10": 0.7105, "exact": 0.0, "failure_mode": "mojibake / replacement chars"},
+    {"checkpoint": "hedo2023/arabic-trocr-universal-v1", "cer_norm_10": 1.0, "exact": 0.0, "failure_mode": "empty output"}
+  ],
+  "decision": "NEGATIVE RESULT: no community TrOCR checkpoint is competitive on printed APTI. TrOCR engine remains implemented (models/trocr.py) but is not part of the evaluated configuration. In-domain fine-tuning is the only viable TrOCR path and was out of scope.",
+  "also_rejected_without_screening": [
+    {"checkpoint": "tarek3laa/TROCR_Arabic", "reason": "config.json 404 (repo incomplete)"},
+    {"checkpoint": "lehrasibali/trocr-finetuned-arabic", "reason": "no processor config"},
+    {"checkpoint": "Ghazouaniwala/trocr-tunisian-arabic", "reason": "dialectal target, out of MSA scope"}
+  ]
+}
