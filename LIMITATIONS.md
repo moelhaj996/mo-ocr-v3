@@ -44,6 +44,18 @@ claim.
   Qwen2-VL's mean-token-logprob is moderately informative (r≈0.48) and is
   used, with a threshold chosen on dev.
 
+## Page-level reading
+
+- The `page` engine (line segmentation + per-region arbitration) has NO
+  quantitative evaluation — no page-level Arabic ground truth exists in
+  this project. Its line-crop confidence bar (0.70) was chosen
+  qualitatively on a single Sudanese-dialect poetry screenshot; treat it
+  as a demo default, not a measured result.
+- Qwen2-VL reads full pages in visual (reversed) order; the bidi repair
+  recovers characters per line but, when the model emits no newlines,
+  whole-text reversal flips line ORDER. The page engine avoids this
+  entirely by segmenting first.
+
 ## Method
 
 - The arbitration policy (primary/fallback, τ=0.40, degeneration flag

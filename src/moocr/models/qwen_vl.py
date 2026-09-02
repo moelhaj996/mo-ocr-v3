@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from moocr.bidi import repair_visual_order
 from moocr.models.base import Recognition, Recognizer
 from moocr.models.trocr import _pick_device
 
@@ -72,6 +73,7 @@ class QwenVLEngine(Recognizer):
         text = self._processor.batch_decode(
             gen, skip_special_tokens=True
         )[0].strip()
+        text, bidi_repaired = repair_visual_order(text)
         conf = None
         if out.scores:
             logprobs = []
@@ -80,4 +82,6 @@ class QwenVLEngine(Recognizer):
                 logprobs.append(lp)
             if logprobs:
                 conf = float(torch.exp(torch.stack(logprobs).mean()))
-        return Recognition(text=text, confidence=conf)
+        return Recognition(
+            text=text, confidence=conf, extra={"bidi_repaired": bidi_repaired}
+        )

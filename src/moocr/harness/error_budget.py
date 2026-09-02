@@ -35,13 +35,16 @@ def _load(path: Path) -> tuple[str, dict[str, dict[str, object]]]:
 def degenerate_flag(pred: str, ref_len_hint: int | None = None) -> bool:
     """Ground-truth-free catastrophe detector for VLM output.
 
-    Flags: output much longer than a plausible word-crop transcription,
-    or containing Latin/CJK runs, or echoing instruction-like phrases.
+    Flags: output much longer than plausible for the crop, or containing
+    Latin/CJK runs. ``ref_len_hint`` (e.g. the fallback engine's text
+    length for the same crop) scales the length test for line-level crops;
+    without it the word-crop threshold applies.
     """
     # Thresholds set on the dev split (0 false alarms on correct output,
     # 49/49 catastrophes caught); len>30 and >=2 non-Arabic letters also
     # close the refusal-leak class observed in the golden regression set.
-    if len(pred) > 30:
+    limit = 30 if ref_len_hint is None else max(30, int(2.5 * ref_len_hint))
+    if len(pred) > limit:
         return True
     non_arabic = sum(
         1 for c in pred if c.isalpha() and not ("؀" <= c <= "ۿ")

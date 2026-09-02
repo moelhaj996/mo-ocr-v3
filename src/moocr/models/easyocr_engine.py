@@ -38,6 +38,17 @@ def order_regions_rtl(regions: list[tuple[object, ...]]) -> list[tuple[object, .
     Within a band, regions sort by right edge, rightmost first (RTL).
     """
 
+    ordered: list[tuple[object, ...]] = []
+    for band in group_regions_rtl(regions):
+        ordered.extend(band)
+    return ordered
+
+
+def group_regions_rtl(
+    regions: list[tuple[object, ...]]
+) -> list[list[tuple[object, ...]]]:
+    """Group regions into reading-order lines; see order_regions_rtl."""
+
     def interval(region: Any) -> tuple[float, float, float]:
         bbox = region[0]
         ys = [p[1] for p in bbox]
@@ -65,11 +76,11 @@ def order_regions_rtl(regions: list[tuple[object, ...]]) -> list[tuple[object, .
             bands.append({"members": [(xr, region)], "y0s": [y0], "y1s": [y1]})
 
     bands.sort(key=lambda b: float(np.median(b["y0s"])))
-    ordered: list[tuple[object, ...]] = []
+    out: list[list[tuple[object, ...]]] = []
     for band in bands:
         band["members"].sort(key=lambda m: -m[0])  # right edge descending
-        ordered.extend(r for _, r in band["members"])
-    return ordered
+        out.append([r for _, r in band["members"]])
+    return out
 
 
 class EasyOCREngine(Recognizer):

@@ -61,8 +61,15 @@ def _arbitration(config: "Config") -> Recognizer:
     )
 
 
+def _page(config: "Config") -> Recognizer:
+    from moocr.models.page import PageEngine
+
+    return PageEngine(config)
+
+
 ENGINES: dict[str, Callable[["Config"], Recognizer]] = {
     "arbitration": _arbitration,
+    "page": _page,
     "easyocr": _easyocr,
     "trocr": _trocr,
     "qwen_vl": _qwen_vl,

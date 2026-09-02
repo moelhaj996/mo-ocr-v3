@@ -88,6 +88,26 @@ original only if masked-LM pseudo-log-likelihood exceeds the original by a
 margin. Enabled in the final configuration ONLY if net-positive on dev with
 CI excluding zero — see RESULTS.md for the measured fix/break outcome.
 
+## Visual-order (bidi) repair — `src/moocr/bidi.py`
+
+Qwen2-VL emits full-page Arabic in VISUAL order (each rendered line
+character-reversed, line order kept). A ground-truth-free detector scores
+both readings of the whole output using orthographic asymmetries ("ال/لل"
+word-initial, "ة" word-final and near-impossible word-initially, suffixes
+"ون/ين/ات/ها") and reverses every Arabic line only when the reversed
+reading wins by a margin. Replayed over all 2,000 stored evaluation
+predictions: 0 outputs changed — provably inert on the evaluated domain.
+
+## Page engine — `src/moocr/models/page.py`
+
+For multi-line images: EasyOCR detects and reads regions; each region crop
+(pad x 4%, y 20%) is re-read by the primary VLM and its text is used only
+when it passes the degeneration flag (length limit scaled by the fallback
+text length, max(30, 2.5x)) and a confidence bar (0.40 for word-length
+regions per the dev sweep; 0.70 for line-length regions — a QUALITATIVE
+default, unevaluated, see LIMITATIONS). Lines join in RTL band order,
+bands join with newlines.
+
 ## Structuring (LayoutLMv3)
 
 `microsoft/layoutlmv3-base`, `apply_ocr=False` (its internal OCR can never
