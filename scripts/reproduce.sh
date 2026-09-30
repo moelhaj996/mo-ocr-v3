@@ -47,5 +47,8 @@ uv run python -m moocr.harness.error_budget \
 uv run python scripts/sweep_policy_dev.py
 uv run python scripts/calibrate_corrector_dev.py
 
+# Remaining numbers cited in the paper (ablations, counts, timing)
+uv run python scripts/paper_stats.py > /dev/null
+
 # Compose RESULTS.md from the artifacts
 uv run python scripts/make_results.py

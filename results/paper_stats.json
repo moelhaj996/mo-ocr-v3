@@ -1,0 +1,212 @@
+{
+ "heldout_ablation": {
+  "flag_and_confidence": {
+   "cer": 0.171,
+   "exact": 0.3269,
+   "delta_vs_easyocr": -0.0584,
+   "ci_95": [
+    -0.0664,
+    -0.0505
+   ],
+   "kept_qwen": 899,
+   "routed_to_easyocr": 851
+  },
+  "flag_only": {
+   "cer": 0.2235,
+   "exact": 0.3069,
+   "delta_vs_easyocr": -0.0059,
+   "ci_95": [
+    -0.0195,
+    0.0079
+   ],
+   "kept_qwen": 1349,
+   "routed_to_easyocr": 401
+  },
+  "confidence_only": {
+   "cer": 0.8415,
+   "exact": 0.324,
+   "delta_vs_easyocr": 0.6122,
+   "ci_95": [
+    0.4886,
+    0.7446
+   ],
+   "kept_qwen": 1024,
+   "routed_to_easyocr": 726
+  },
+  "original_flag_and_confidence": {
+   "cer": 0.2057,
+   "exact": 0.3263,
+   "delta_vs_easyocr": -0.0236,
+   "ci_95": [
+    -0.0424,
+    -0.0035
+   ],
+   "kept_qwen": 914,
+   "routed_to_easyocr": 836
+  },
+  "oracle_degenerate_detector": {
+   "cer": 0.2158,
+   "exact": 0.3069,
+   "delta_vs_easyocr": -0.0136,
+   "ci_95": [
+    -0.025,
+    -0.0023
+   ],
+   "kept_qwen": 1365,
+   "routed_to_easyocr": 385
+  },
+  "oracle_router": {
+   "cer": 0.1449,
+   "exact": 0.38,
+   "delta_vs_easyocr": -0.0845,
+   "ci_95": [
+    -0.0909,
+    -0.0783
+   ]
+  },
+  "posthoc_tau_0.35": {
+   "cer": 0.176,
+   "exact": 0.3291,
+   "delta_vs_easyocr": -0.0533,
+   "ci_95": [
+    -0.0626,
+    -0.044
+   ],
+   "kept_qwen": 1038
+  },
+  "posthoc_tau_0.45": {
+   "cer": 0.1735,
+   "exact": 0.3189,
+   "delta_vs_easyocr": -0.0559,
+   "ci_95": [
+    -0.063,
+    -0.0486
+   ],
+   "kept_qwen": 728
+  }
+ },
+ "heldout_routing": {
+  "correct_qwen_outputs_discarded": 38,
+  "flagged": 401,
+  "degenerate_in_final_output": 2
+ },
+ "heldout_raw_delta": {
+  "delta": -0.0671,
+  "ci_95": [
+   -0.0756,
+   -0.0588
+  ]
+ },
+ "spaces": {
+  "easyocr_outputs_with_space": 260,
+  "references_with_space": 0,
+  "easyocr_cer_spaces_removed": 0.2102,
+  "arbitration_cer_spaces_removed": 0.1587,
+  "delta": -0.0515,
+  "ci_95": [
+   -0.0588,
+   -0.0443
+  ]
+ },
+ "outcomes": {
+  "easyocr": {
+   "exact": 246,
+   "wrong": 1504,
+   "degenerate": 0
+  },
+  "qwen_vl": {
+   "exact": 515,
+   "wrong": 850,
+   "degenerate": 385
+  },
+  "arbitration": {
+   "exact": 572,
+   "wrong": 1176,
+   "degenerate": 2
+  }
+ },
+ "degenerate_kinds": {
+  "arabic_refusal": 229,
+  "instruction_echo": 73,
+  "latin_script": 19,
+  "other": 64,
+  "total": 385,
+  "refusals_opening_with_japanese": 225,
+  "longer_than_30": 359,
+  "two_or_more_non_arabic_letters": 244,
+  "median_length": 87
+ },
+ "dot_pairs": {
+  "easyocr": {
+   "total_edits": 3105,
+   "yaa_baa_plus_taa_noon": 1141,
+   "share": 0.367
+  },
+  "arbitration": {
+   "total_edits": 2315,
+   "yaa_baa_plus_taa_noon": 666,
+   "share": 0.288
+  }
+ },
+ "reference_lengths": {
+  "raw": {
+   "7": 902,
+   "8": 506,
+   "9": 237,
+   "10": 105
+  },
+  "normalized": {
+   "5": 1,
+   "7": 905,
+   "8": 503,
+   "9": 237,
+   "10": 104
+  },
+  "mean_normalized": 7.74
+ },
+ "latency": {
+  "easyocr_golden": {
+   "median_ms": 59.3,
+   "mean_ms": 61.9
+  },
+  "easyocr_dev": {
+   "median_ms": 57.7,
+   "mean_ms": 58.9
+  },
+  "easyocr_heldout": {
+   "median_ms": 92.5,
+   "mean_ms": 95.5
+  },
+  "qwen_vl_golden": {
+   "median_ms": 470.6,
+   "mean_ms": 780.3
+  },
+  "qwen_vl_dev": {
+   "median_ms": 515.8,
+   "mean_ms": 731.4
+  },
+  "qwen_vl_heldout": {
+   "median_ms": 512.4,
+   "mean_ms": 698.1
+  },
+  "heldout_total_time_ratio_arbitration_over_easyocr": 7.79
+ },
+ "confidence_correlation": {
+  "easyocr_golden": 0.086,
+  "qwen_vl_golden": 0.479,
+  "easyocr_dev": 0.282,
+  "qwen_vl_dev": 0.499,
+  "easyocr_heldout": 0.173,
+  "qwen_vl_heldout": 0.457
+ },
+ "bidi_check_qwen_heldout": {
+  "reversed_scores_better": 109,
+  "of_which_degenerate": 101,
+  "reversal_reaches_cer_at_most_0.2": 0
+ },
+ "dev_flag": {
+  "degenerate": 49,
+  "degenerate_flagged": 49,
+  "exact_flagged": 0
+ }
+}
