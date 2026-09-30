@@ -1,74 +1,74 @@
 [
   {
     "margin": 0.25,
-    "fixed": 20,
-    "broke": 63,
-    "unchanged": 117,
-    "delta_cer_vs_no_correction": 0.0372,
+    "fixed": 37,
+    "broke": 62,
+    "unchanged": 101,
+    "delta_cer_vs_no_correction": 0.0216,
     "ci_95": [
-      0.0227,
-      0.0517
+      0.0045,
+      0.0387
     ],
-    "p": 0.0
+    "p": 0.0146
   },
   {
     "margin": 0.5,
-    "fixed": 20,
-    "broke": 59,
-    "unchanged": 121,
-    "delta_cer_vs_no_correction": 0.0346,
+    "fixed": 37,
+    "broke": 58,
+    "unchanged": 105,
+    "delta_cer_vs_no_correction": 0.0183,
     "ci_95": [
-      0.0202,
-      0.0491
+      0.0013,
+      0.0352
     ],
-    "p": 0.0
+    "p": 0.035
   },
   {
     "margin": 1.0,
-    "fixed": 19,
-    "broke": 49,
-    "unchanged": 132,
-    "delta_cer_vs_no_correction": 0.0268,
+    "fixed": 36,
+    "broke": 50,
+    "unchanged": 114,
+    "delta_cer_vs_no_correction": 0.0118,
     "ci_95": [
-      0.0131,
-      0.0402
+      -0.0045,
+      0.0278
     ],
-    "p": 0.0
+    "p": 0.1656
   },
   {
     "margin": 1.5,
-    "fixed": 17,
-    "broke": 41,
-    "unchanged": 142,
-    "delta_cer_vs_no_correction": 0.0202,
+    "fixed": 33,
+    "broke": 42,
+    "unchanged": 125,
+    "delta_cer_vs_no_correction": 0.0065,
     "ci_95": [
-      0.0078,
-      0.0326
+      -0.0085,
+      0.0213
     ],
-    "p": 0.0006
+    "p": 0.4192
   },
   {
     "margin": 2.0,
-    "fixed": 15,
-    "broke": 29,
-    "unchanged": 156,
-    "delta_cer_vs_no_correction": 0.0124,
+    "fixed": 28,
+    "broke": 34,
+    "unchanged": 138,
+    "delta_cer_vs_no_correction": 0.0033,
     "ci_95": [
-      0.0013,
-      0.0235
+      -0.0105,
+      0.017
     ],
-    "p": 0.0318
+    "p": 0.7098
   },
   {
     "margin": 3.0,
-    "fixed": 13,
-    "broke": 17,
-    "unchanged": 170,
-    "delta_cer_vs_no_correction": 0.0026,
+    "fixed": 19,
+    "broke": 19,
+    "unchanged": 162,
+    "delta_cer_vs_no_correction": -0.0013,
     "ci_95": [
-      -0.0065,
-      0.0116
+      -0.0123,
+      0.0091
     ],
-    "p": 0.6276
+    "p": 0.8446
   }
 ]

@@ -39,9 +39,21 @@ CONFUSION_FAMILIES: list[str] = [
     "ئي",
     "لن",
 ]
-_FAMILY_OF: dict[str, str] = {
-    ch: fam for fam in CONFUSION_FAMILIES for ch in fam
-}
+def _build_family_map(families: list[str]) -> dict[str, str]:
+    """Map each letter to the UNION of the families it belongs to.
+
+    A plain dict comprehension keeps only the last family per letter, which
+    silently removed most candidates for letters such as noon and yaa that
+    sit in several families.
+    """
+    merged: dict[str, str] = {}
+    for fam in families:
+        for ch in fam:
+            merged[ch] = "".join(dict.fromkeys(merged.get(ch, "") + fam))
+    return merged
+
+
+_FAMILY_OF: dict[str, str] = _build_family_map(CONFUSION_FAMILIES)
 
 
 def confusion_candidates(word: str, max_edits: int, cap: int = 200) -> list[str]:

@@ -48,6 +48,8 @@ for s in per:
         continue
     p0 = pll(word)
     best_c, best_p = word, p0
+    if len(decisions) % 10 == 0:
+        print(f"  word {len(decisions)}/{len(per)}, {len(pll_cache)} scored, {time.time()-t0:.0f}s", flush=True)
     for c in cands:
         pc = pll(c)
         if pc > best_p:

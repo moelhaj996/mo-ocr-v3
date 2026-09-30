@@ -30,3 +30,13 @@ def test_edit_cap_respected():
 
 def test_no_candidates_for_unconfusable_text():
     assert confusion_candidates("م", max_edits=2) == []
+
+
+def test_letters_in_several_families_use_all_of_them():
+    # regression: noon sits in two families and yaa in three; an earlier
+    # lookup table kept only the last family, so a misread noon could never
+    # be turned back into taa (the second most frequent recognizer error)
+    assert "كتاب" in confusion_candidates("كناب", max_edits=1)  # noon -> taa
+    assert "بيت" in confusion_candidates("ببت", max_edits=1)  # baa -> yaa
+    assert "قلب" in confusion_candidates("قنب", max_edits=1)  # noon -> lam
+    assert "بيت" in confusion_candidates("بنت", max_edits=1)  # noon -> yaa
