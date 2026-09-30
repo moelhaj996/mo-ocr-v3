@@ -204,6 +204,48 @@
   "of_which_degenerate": 101,
   "reversal_reaches_cer_at_most_0.2": 0
  },
+ "wer_heldout": {
+  "easyocr": {
+   "normalized": 1.0143,
+   "raw": 1.0526,
+   "hypotheses_with_more_than_one_token": 260,
+   "reference_token_present_with_extra_tokens": 0,
+   "token_edits_normalized": {
+    "total": 1775,
+    "substitutions_and_deletions": 1504,
+    "insertions": 271
+   }
+  },
+  "qwen_vl": {
+   "normalized": 3.7971,
+   "raw": 3.8154,
+   "hypotheses_with_more_than_one_token": 434,
+   "reference_token_present_with_extra_tokens": 6,
+   "token_edits_normalized": {
+    "total": 6645,
+    "substitutions_and_deletions": 1229,
+    "insertions": 5416
+   }
+  },
+  "arbitration": {
+   "normalized": 0.7686,
+   "raw": 0.7983,
+   "hypotheses_with_more_than_one_token": 152,
+   "reference_token_present_with_extra_tokens": 2,
+   "token_edits_normalized": {
+    "total": 1345,
+    "substitutions_and_deletions": 1176,
+    "insertions": 169
+   }
+  },
+  "definition": "WER = (word substitutions + deletions + insertions) / number of reference words (1750). 'normalized' uses scoring_v1 text, 'raw' the stored strings. The breakdown assumes every reference is a single token (asserted): insertions = extra hypothesis tokens; the residual is substitutions plus deletions, at most one per word. WER is not in general the exact-mismatch rate: a hypothesis holding the reference word plus extra words costs only insertions but counts as an exact mismatch."
+ },
+ "qwen_latency_by_outcome": {
+  "degenerate_median_ms": 1365.8,
+  "non_degenerate_median_ms": 501.1,
+  "degenerate_median_chars": 87,
+  "non_degenerate_median_chars": 7
+ },
  "dev_flag": {
   "degenerate": 49,
   "degenerate_flagged": 49,

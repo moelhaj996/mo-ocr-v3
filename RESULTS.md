@@ -6,9 +6,10 @@ file names is a legacy label, not the dataset's origin; see LIMITATIONS.md).
 Splits: golden 50 (pilot set, rule designed here), dev 200 (threshold tuned here),
 held-out 1,750 (no decisions). Golden and dev arbitration rows are in-sample.
 Normalization v1.1.0; scoring profile scoring_v1; bootstrap seed 20260901;
-10,000 paired resamples. WER is suppressed on this corpus (single-word
-references — it degenerates to exact-match; reporting it would repeat the
-v2 artifact of WER=1.01 from trailing whitespace).
+10,000 paired resamples. CER and exact match are the principal metrics. WER
+(word substitutions + deletions + insertions over reference words) can exceed 1
+because hypotheses may hold several words; it is not in general the exact-mismatch
+rate, and is reported for the record in results/paper_stats.json (see below).
 
 ## Main table (corpus CER; failures scored 1.0 and counted)
 
@@ -108,7 +109,9 @@ propose several letters, is kept as corrector_calibration_dev_restricted_candida
 | perfect degenerate detector (uses reference) | 0.2158 | 30.7% | -0.0136 | [-0.0250, -0.0023] |
 | perfect router (uses reference) | 0.1449 | 38.0% | -0.0845 | [-0.0909, -0.0783] |
 
-Correct Qwen2-VL readings discarded by the rule: 38. EasyOCR outputs containing a spurious space: 260 of 1750; with spaces removed from both systems: 0.2102 vs 0.1587. Held-out total running time, arbitration over EasyOCR: 7.79x.
+Held-out corpus WER, normalized (token edits / 1750 reference tokens): easyocr 1.01, qwen_vl 3.80, arbitration 0.77; raw: 1.05, 3.82, 0.80.
+
+Correct Qwen2-VL readings discarded by the rule: 38. EasyOCR outputs containing a spurious space: 260 of 1750; with spaces removed from both systems: 0.2102 vs 0.1587. Estimated held-out cost of arbitration, reconstructed from per-engine timings recorded while each engine ran alone (Qwen2-VL on every image plus EasyOCR on the routed images, over EasyOCR on every image; the combined engine was not timed end to end): 7.79x.
 
 ## Error budget / fusion headroom
 

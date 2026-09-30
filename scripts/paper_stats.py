@@ -190,6 +190,53 @@ out["bidi_check_qwen_heldout"] = {
     "reversal_reaches_cer_at_most_0.2": sum(b < a and b <= 0.2 for a, b in rev),
 }
 
+# word error rate, for the record: token-level edits over reference tokens.
+# Every reference is one token, but hypotheses can contain several, so WER is
+# defined and can exceed 1 (insertions count).
+from moocr.metrics import levenshtein_tokens, token_edit_breakdown  # noqa: E402
+
+def corpus_wer(hyps):
+    edits = sum(levenshtein_tokens(r.split(), h.split()) for h, r in zip(hyps, refs))
+    return round(edits / sum(len(r.split()) for r in refs), 4)
+
+qwen_final = [N(s["pred"]) for s in qw["per_sample"]]
+
+
+raw_qwen = [str(s["pred"]) for s in qw["per_sample"]]
+wer = {}
+for name, hn, hr in (("easyocr", base, raw_base), ("qwen_vl", qwen_final, raw_qwen), ("arbitration", final, raw_final)):
+    b = token_edit_breakdown(hn, refs)
+    wer[name] = {
+        "normalized": corpus_wer(hn),
+        "raw": round(sum(levenshtein_tokens(r.split(), h.split()) for h, r in zip(hr, raw_refs)) / sum(len(r.split()) for r in raw_refs), 4),
+        "hypotheses_with_more_than_one_token": sum(len(h.split()) > 1 for h in hn),
+        "reference_token_present_with_extra_tokens": sum(len(h.split()) > 1 and r in h.split() for h, r in zip(hn, refs)),
+        "token_edits_normalized": {
+            "total": b["total"],
+            "substitutions_and_deletions": b["substitutions"] + b["deletions"],
+            "insertions": b["insertions"],
+        },
+    }
+wer["definition"] = (
+    "WER = (word substitutions + deletions + insertions) / number of reference words (1750). "
+    "'normalized' uses scoring_v1 text, 'raw' the stored strings. The breakdown assumes every "
+    "reference is a single token (asserted): insertions = extra hypothesis tokens; the residual "
+    "is substitutions plus deletions, at most one per word. WER is not in general the "
+    "exact-mismatch rate: a hypothesis holding the reference word plus extra words costs only "
+    "insertions but counts as an exact mismatch."
+)
+out["wer_heldout"] = wer
+
+# why degenerate outputs are slow: length and latency, not the token limit
+lat_deg = [s["latency_ms"] for s in qw["per_sample"] if qcer[s["id"]] > 1]
+lat_ok = [s["latency_ms"] for s in qw["per_sample"] if qcer[s["id"]] <= 1]
+out["qwen_latency_by_outcome"] = {
+    "degenerate_median_ms": round(statistics.median(lat_deg), 1),
+    "non_degenerate_median_ms": round(statistics.median(lat_ok), 1),
+    "degenerate_median_chars": statistics.median(len(str(s["pred"])) for s in qw["per_sample"] if qcer[s["id"]] > 1),
+    "non_degenerate_median_chars": statistics.median(len(str(s["pred"])) for s in qw["per_sample"] if qcer[s["id"]] <= 1),
+}
+
 # dev: what the flag does there
 qd, ed = load("qwen_vl_dev"), load("easyocr_dev")
 dcer = [cer(N(s["pred"]), N(s["truth"])) for s in qd["per_sample"]]

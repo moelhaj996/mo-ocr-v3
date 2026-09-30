@@ -61,9 +61,10 @@ out.append("file names is a legacy label, not the dataset's origin; see LIMITATI
 out.append("Splits: golden 50 (pilot set, rule designed here), dev 200 (threshold tuned here),")
 out.append("held-out 1,750 (no decisions). Golden and dev arbitration rows are in-sample.")
 out.append("Normalization v1.1.0; scoring profile scoring_v1; bootstrap seed 20260901;")
-out.append("10,000 paired resamples. WER is suppressed on this corpus (single-word")
-out.append("references — it degenerates to exact-match; reporting it would repeat the")
-out.append("v2 artifact of WER=1.01 from trailing whitespace).\n")
+out.append("10,000 paired resamples. CER and exact match are the principal metrics. WER")
+out.append("(word substitutions + deletions + insertions over reference words) can exceed 1")
+out.append("because hypotheses may hold several words; it is not in general the exact-mismatch")
+out.append("rate, and is reported for the record in results/paper_stats.json (see below).\n")
 
 out.append("## Main table (corpus CER; failures scored 1.0 and counted)\n")
 out.append("The `median ms` of a `sim_arb` row is the median of whichever engine's stored")
@@ -174,12 +175,20 @@ if stats:
         a = stats["heldout_ablation"][key]
         out.append(f"| {label} | {a['cer']:.4f} | {a['exact']:.1%} | {a['delta_vs_easyocr']:+.4f} | "
                    f"[{a['ci_95'][0]:+.4f}, {a['ci_95'][1]:+.4f}] |")
+    w = stats.get("wer_heldout")
+    if w:
+        out.append(f"\nHeld-out corpus WER, normalized (token edits / 1750 reference tokens): "
+                   f"easyocr {w['easyocr']['normalized']:.2f}, qwen_vl {w['qwen_vl']['normalized']:.2f}, "
+                   f"arbitration {w['arbitration']['normalized']:.2f}; raw: {w['easyocr']['raw']:.2f}, "
+                   f"{w['qwen_vl']['raw']:.2f}, {w['arbitration']['raw']:.2f}.")
     sp, rt = stats["spaces"], stats["heldout_routing"]
     out.append(f"\nCorrect Qwen2-VL readings discarded by the rule: {rt['correct_qwen_outputs_discarded']}. "
                f"EasyOCR outputs containing a spurious space: {sp['easyocr_outputs_with_space']} of 1750; "
                f"with spaces removed from both systems: {sp['easyocr_cer_spaces_removed']:.4f} vs "
-               f"{sp['arbitration_cer_spaces_removed']:.4f}. Held-out total running time, arbitration over "
-               f"EasyOCR: {stats['latency']['heldout_total_time_ratio_arbitration_over_easyocr']}x.\n")
+               f"{sp['arbitration_cer_spaces_removed']:.4f}. Estimated held-out cost of arbitration, reconstructed "
+               f"from per-engine timings recorded while each engine ran alone (Qwen2-VL on every image plus "
+               f"EasyOCR on the routed images, over EasyOCR on every image; the combined engine was not timed "
+               f"end to end): {stats['latency']['heldout_total_time_ratio_arbitration_over_easyocr']}x.\n")
 
 if budget:
     out.append("## Error budget / fusion headroom\n")
