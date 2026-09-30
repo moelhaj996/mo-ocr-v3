@@ -2,8 +2,10 @@
 
 Reports, per run (protocol §2, §4, §6):
 - CER twice: raw Unicode and SCORING_V1-normalized (gap is a diagnostic)
-- WER only when the split contains multi-word references (else suppressed
-  as meaningless with a stated reason)
+- WER only when the split contains multi-word references; otherwise it is
+  suppressed with a stated reason (with single-token references insertions
+  from multi-word hypotheses can push it above 1, and it is not the
+  exact-mismatch rate; scripts/paper_stats.py reports it for the record)
 - exact-match raw/normalized
 - transparent failure accounting: failed samples are scored CER=1.0 AND
   reported separately; both including/excluding aggregates appear
@@ -143,7 +145,12 @@ def _score_run(
             wer(h, r) for h, r in zip(hyps_norm, refs_norm)
         ) / len(refs_norm)
     else:
-        scores["wer"] = "suppressed: all references are single words; WER degenerates to exact-match"
+        scores["wer"] = (
+            "suppressed: single-token references; WER (substitutions + deletions + insertions "
+            "over reference words) can exceed 1 through insertions and is not the exact-mismatch "
+            "rate; CER and exact match are the principal metrics. "
+            "scripts/paper_stats.py reports WER for the record."
+        )
 
     slices: dict[str, object] = {}
     for key in ("len_bucket", "has_digit"):

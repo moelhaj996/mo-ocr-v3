@@ -9,8 +9,13 @@ Definitions (stated per protocol §6):
   (guarded to max(total, 1) only when the whole corpus is empty; empty
   individual references contribute edits but no denominator).
 - Macro CER (secondary) = unweighted mean of per-sample CER.
-- WER analogous over whitespace tokens. WER is NOT meaningful on
-  single-word datasets; callers must suppress it there.
+- WER: total word substitutions, deletions and insertions divided by the
+  number of reference words. With single-token references a hypothesis may
+  still contain several words, so insertions can push WER above 1, and WER
+  is not in general equal to the exact-mismatch rate (a hypothesis holding
+  the reference word plus an extra word costs one insertion but counts as an
+  exact mismatch). The harness does not treat it as a principal metric on
+  such data; scripts/paper_stats.py reports it for the record.
 
 Every metric is computed twice: on raw Unicode and after SCORING
 normalization. The raw-vs-normalized gap is itself a diagnostic.
@@ -64,6 +69,32 @@ def levenshtein_tokens(a: Sequence[str], b: Sequence[str]) -> int:
             cur.append(min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (ta != tb)))
         prev = cur
     return prev[-1]
+
+
+def token_edit_breakdown(hyps: Sequence[str], refs: Sequence[str]) -> dict[str, int]:
+    """Word substitutions, deletions and insertions summed over the corpus.
+
+    Exact only when every reference is a single token, which is asserted.
+    Under that assumption the minimal alignment is determined: a hypothesis
+    that contains the reference token costs len(hyp) - 1 insertions; one that
+    does not contain it costs one substitution plus len(hyp) - 1 insertions;
+    an empty hypothesis costs one deletion. Their sum equals the token
+    Levenshtein distance, which is also checked.
+    """
+    subs = dels = ins = 0
+    for h, r in zip(hyps, refs):
+        rt, ht = r.split(), h.split()
+        if len(rt) != 1:
+            raise ValueError("token_edit_breakdown is exact only for single-token references")
+        if not ht:
+            dels += 1
+        else:
+            ins += len(ht) - 1
+            if rt[0] not in ht:
+                subs += 1
+    total = sum(levenshtein_tokens(r.split(), h.split()) for h, r in zip(hyps, refs))
+    assert subs + dels + ins == total, "breakdown does not sum to the token edit distance"
+    return {"substitutions": subs, "deletions": dels, "insertions": ins, "total": total}
 
 
 @dataclass(frozen=True)

@@ -40,9 +40,11 @@ def degenerate_flag(pred: str, ref_len_hint: int | None = None) -> bool:
     length for the same crop) scales the length test for line-level crops;
     without it the word-crop threshold applies.
     """
-    # Thresholds set on the dev split (0 false alarms on correct output,
-    # 49/49 catastrophes caught); len>30 and >=2 non-Arabic letters also
-    # close the refusal-leak class observed in the golden regression set.
+    # Limits written from the golden (pilot) outputs, first as 40/3 and then
+    # lowered to 30/2 after two golden refusals passed; checked on dev (49/49
+    # catastrophes caught, 0 false alarms on exact output, 0 routing changes;
+    # see results/paper_stats.json dev_flag). Held-out sensitivity to the
+    # limits is reported in paper_stats.json heldout_ablation.
     limit = 30 if ref_len_hint is None else max(30, int(2.5 * ref_len_hint))
     if len(pred) > limit:
         return True

@@ -2,6 +2,7 @@ import pytest
 
 from moocr.metrics import (
     bidi_check,
+    token_edit_breakdown,
     cer,
     confusion_report,
     fix_break_counts,
@@ -90,3 +91,40 @@ def test_corpus_cer_empty_ref_matches_documented_definition():
     # verification finding: empty refs must not inflate the denominator
     s = score_corpus(["x", "ab"], ["", "ab"])
     assert s.corpus_cer == pytest.approx(1 / 2)  # 1 edit / 2 true ref chars
+
+
+WER_CASES = [
+    ("كتاب", "كتاب", 0.0, (0, 0, 0)),  # exact match
+    ("كتاب", "هذا كتاب", 1.0, (0, 0, 1)),  # reference word preceded by an extra word
+    ("كتاب", "كتاب هذا", 1.0, (0, 0, 1)),  # reference word followed by an extra word
+    ("كتاب", "كتب", 1.0, (1, 0, 0)),  # substitution
+    ("كتاب", "", 1.0, (0, 1, 0)),  # empty hypothesis
+]
+
+
+@pytest.mark.parametrize("ref,hyp,expected_wer,breakdown", WER_CASES)
+def test_wer_single_token_reference(ref, hyp, expected_wer, breakdown):
+    assert wer(hyp, ref) == expected_wer
+    b = token_edit_breakdown([hyp], [ref])
+    assert (b["substitutions"], b["deletions"], b["insertions"]) == breakdown
+    assert b["total"] == sum(breakdown)
+
+
+def test_wer_is_not_the_exact_mismatch_rate():
+    # the reference word plus one extra word: an exact mismatch, but WER counts
+    # a single insertion, not a mismatch plus an insertion
+    assert wer("هذا كتاب", "كتاب") == 1.0
+    assert "هذا كتاب" != "كتاب"
+
+
+@pytest.mark.parametrize("ref,hyp,expected_wer,breakdown", WER_CASES)
+def test_wer_matches_jiwer_when_available(ref, hyp, expected_wer, breakdown):
+    jiwer = pytest.importorskip("jiwer")
+    assert wer(hyp, ref) == pytest.approx(jiwer.wer(ref, hyp))
+    out = jiwer.process_words(ref, hyp)
+    assert (out.substitutions, out.deletions, out.insertions) == breakdown
+
+
+def test_token_edit_breakdown_rejects_multi_token_references():
+    with pytest.raises(ValueError):
+        token_edit_breakdown(["اب جد"], ["اب جد"])
