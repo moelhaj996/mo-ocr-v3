@@ -79,15 +79,15 @@ def build_budget(paths: list[Path]) -> dict[str, object]:
         for i in ids:
             s = samples[i]
             raw_edits += levenshtein(str(s["truth"]), str(s["pred"]))
-            raw_len += max(len(str(s["truth"])), 1)
+            raw_len += len(str(s["truth"]))
             c = cer(norm_pred(e, i), refs[i])
             sample_cer[e][i] = c
             norm_edits += levenshtein(refs[i], norm_pred(e, i))
-            norm_len += max(len(refs[i]), 1)
+            norm_len += len(refs[i])
             if s.get("confidence") is not None:
                 confs.append(float(s["confidence"]))  # type: ignore[arg-type]
                 corrects.append(1.0 if c == 0 else 0.0)
-        cer_raw, cer_norm = raw_edits / raw_len, norm_edits / norm_len
+        cer_raw, cer_norm = raw_edits / max(raw_len, 1), norm_edits / max(norm_len, 1)
         conf_stats: dict[str, object] = {"n_with_confidence": len(confs)}
         if len(confs) > 2 and 0 < sum(corrects) < len(corrects):
             ca = np.array(confs)
@@ -133,7 +133,7 @@ def build_budget(paths: list[Path]) -> dict[str, object]:
         )
         for i in ids
     )
-    total_ref = sum(max(len(refs[i]), 1) for i in ids)
+    total_ref = max(sum(len(refs[i]) for i in ids), 1)
 
     degen: dict[str, object] = {}
     for e, samples in engines.items():
