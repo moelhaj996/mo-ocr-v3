@@ -15,6 +15,10 @@
 \usetikzlibrary{shapes.geometric,arrows.meta,positioning}
 \usepackage[colorlinks=true,linkcolor=black,citecolor=black,urlcolor=blue!50!black]{hyperref}
 
+\setmainfont{Times New Roman}
+\setsansfont{Helvetica}
+\setmonofont[Scale=0.9]{Menlo}
+
 \TeXXeTstate=1
 \newfontfamily\arabicfont[Script=Arabic,Scale=1.05]{Geeza Pro}
 \newcommand{\ar}[1]{{\beginR\arabicfont #1\endR}}
@@ -46,8 +50,8 @@ off-topic text, and a threshold on the geometric mean of the token
 probabilities sends low-confidence readings to EasyOCR. Neither test is
 enough alone. The rule was designed on 250 images kept apart from the held-out
 split. On the held-out split it lowers the character error rate from 0.2294 to
-0.1710, a difference of $-0.0584$ (95\% paired bootstrap interval $-0.0664$ to
-$-0.0505$), and raises exact match to 32.7\%. The result is sensitive to one
+0.1710, a difference of −0.0584 (95\% paired bootstrap interval −0.0664 to
+−0.0505), and raises exact match to 32.7\%. The result is sensitive to one
 limit in the length check: with the limit I first used, the error rate is
 0.2057, and fifteen outputs account for the difference. Two ideas that I
 expected to help did not. Three community
@@ -215,7 +219,7 @@ used.
 How the rule was arrived at matters for reading the results, so here is the
 order of events. I designed it on a pilot set of 50 images, the first data
 either engine read. On those 50 images Qwen2-VL's confidence correlated with
-exact correctness at $r=0.48$ and EasyOCR's at $r=0.09$, which is why
+exact correctness at \emph{r} = 0.48 and EasyOCR's at \emph{r} = 0.09, which is why
 Qwen2-VL is the primary engine and EasyOCR's confidence is ignored. The first
 flag, with limits of 40 characters and three non-Arabic letters, was also
 written from those outputs. I then tuned the confidence threshold on a
@@ -376,7 +380,7 @@ that produce a near-correct word.
  & \multicolumn{3}{c}{CER, normalized} & \multicolumn{2}{c}{Held-out only} \\
 \cmidrule(lr){2-4}\cmidrule(lr){5-6}
 System & Pilot & Dev & Held-out & CER raw & Exact match \\
- & $n=50$ & $n=200$ & $n=1750$ & & \\
+ & \emph{n} = 50 & \emph{n} = 200 & \emph{n} = 1750 & & \\
 \midrule
 EasyOCR & 0.2332 & 0.2332 & 0.2294 & 0.2538 & 14.1\% \\
 Qwen2-VL-2B & 2.6321 & 2.7466 & 2.3470 & 2.3729 & 29.4\% \\
@@ -390,11 +394,11 @@ and tuned on those images. No run had a failure.}
 \end{table}
 
 Arbitration lowers the held-out error rate from 0.2294 to 0.1710
-(Table~\ref{tab:main}). The difference is $-0.0584$ with a 95\% interval of
-$-0.0664$ to $-0.0505$, and none of the 10,000 resamples produced a difference
+(Table~\ref{tab:main}). The difference is −0.0584 with a 95\% interval of
+−0.0664 to −0.0505, and none of the 10,000 resamples produced a difference
 of zero or more. In relative terms the error rate falls by 25\%. Exact match
-rises from 246 words to 572. On raw text the difference is $-0.0671$, with an
-interval of $-0.0756$ to $-0.0588$.
+rises from 246 words to 572. On raw text the difference is −0.0671, with an
+interval of −0.0756 to −0.0588.
 
 Of the 1,750 words, 851 were routed to EasyOCR and 899 kept the Qwen2-VL
 text. Two degenerate outputs survived both tests. The threshold also threw
@@ -411,7 +415,7 @@ nine or ten letters entirely right.
 \toprule
  & & \multicolumn{2}{c}{EasyOCR} & \multicolumn{2}{c}{Arbitration} \\
 \cmidrule(lr){3-4}\cmidrule(lr){5-6}
-Reference length & $n$ & CER & Exact & CER & Exact \\
+Reference length & \emph{n} & CER & Exact & CER & Exact \\
 \midrule
 7 or 8 characters & 1408 & 0.2219 & 16.6\% & 0.1703 & 34.5\% \\
 9 or 10 characters & 342 & 0.2536 & 3.5\% & 0.1734 & 25.1\% \\
@@ -432,7 +436,7 @@ inside that range and one step above the minimum, because with 200 images the
 differences among 0.30 to 0.45 are noise.
 
 The flag alone brings the development error rate from 0.2332 to 0.1992. The
-interval on that difference, $-0.0654$ to $-0.0007$, only just excludes zero.
+interval on that difference, −0.0654 to −0.0007, only just excludes zero.
 
 \begin{figure}[!htb]
 \centering
@@ -457,13 +461,13 @@ choose anything.
 Rule & CER & Difference & 95\% interval \\
 \midrule
 EasyOCR alone & 0.2294 & & \\
-Flag only & 0.2235 & $-0.0059$ & $-0.0195$ to $+0.0079$ \\
-Confidence threshold only & 0.8415 & $+0.6122$ & $+0.4886$ to $+0.7446$ \\
-Original flag and threshold & 0.2057 & $-0.0236$ & $-0.0424$ to $-0.0035$ \\
-Flag and threshold (reported) & 0.1710 & $-0.0584$ & $-0.0664$ to $-0.0505$ \\
+Flag only & 0.2235 & −0.0059 & −0.0195 to +0.0079 \\
+Confidence threshold only & 0.8415 & +0.6122 & +0.4886 to +0.7446 \\
+Original flag and threshold & 0.2057 & −0.0236 & −0.0424 to −0.0035 \\
+Flag and threshold (reported) & 0.1710 & −0.0584 & −0.0664 to −0.0505 \\
 \midrule
-Perfect degenerate detector & 0.2158 & $-0.0136$ & $-0.0250$ to $-0.0023$ \\
-Perfect router & 0.1449 & $-0.0845$ & $-0.0909$ to $-0.0783$ \\
+Perfect degenerate detector & 0.2158 & −0.0136 & −0.0250 to −0.0023 \\
+Perfect router & 0.1449 & −0.0845 & −0.0909 to −0.0783 \\
 \bottomrule
 \end{tabular}
 \caption{Held-out error rate under different routing rules, with the
@@ -504,8 +508,8 @@ distance between EasyOCR alone and that bound.
 
 A confidence signal can drive such a router only if it tracks correctness. On
 the held-out split Qwen2-VL's confidence correlates with exact correctness at
-$r=0.46$. It averages 0.57 on correct words and 0.41 on incorrect ones.
-EasyOCR's correlates at $r=0.17$. These agree in direction with the pilot
+\emph{r} = 0.46. It averages 0.57 on correct words and 0.41 on incorrect ones.
+EasyOCR's correlates at \emph{r} = 0.17. These agree in direction with the pilot
 values that the design was based on, though EasyOCR's figure moved between
 0.09 and 0.28 across the three splits. I did not test whether adding EasyOCR's
 confidence to the rule would help.
@@ -539,8 +543,8 @@ EasyOCR is also charged for something that is not a reading error. Its
 detector sometimes splits a word crop into two regions, and the joined output
 then contains a space. This happens in 260 of its 1,750 outputs, and no
 reference contains a space. With spaces removed from both systems' outputs
-the comparison is 0.2102 against 0.1587, a difference of $-0.0515$ (interval
-$-0.0588$ to $-0.0443$), so the conclusion does not depend on it.
+the comparison is 0.2102 against 0.1587, a difference of −0.0515 (interval
+−0.0588 to −0.0443), so the conclusion does not depend on it.
 
 About a tenth of EasyOCR's raw error disappears under normalization (0.2538
 against 0.2294). On printed input these are recognition errors that the
@@ -607,9 +611,9 @@ space were skipped, which removed 36 of the 200, and each word was limited to
 It did not help at any margin (Figure~\ref{fig:corr}). A word counts as fixed
 if its error rate fell and as broken if it rose. With a margin of 0.25 the
 corrector fixed 37 words and broke 62, and the error rate rose by 0.022
-(interval $+0.005$ to $+0.039$). Raising the margin cut the breaks faster than
+(interval +0.005 to +0.039). Raising the margin cut the breaks faster than
 the fixes. At a margin of 3 it fixed 19 and broke 19, and the change in error
-rate, $-0.001$, is well inside the noise (interval $-0.012$ to $+0.009$).
+rate, −0.001, is well inside the noise (interval −0.012 to +0.009).
 Fixes never outnumbered breaks.
 
 \begin{figure}[!htb]
