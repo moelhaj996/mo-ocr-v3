@@ -1,0 +1,324 @@
+{
+  "meta": {
+    "engine": "trocr",
+    "engine_config": {
+      "checkpoint": "gagan3012/ArOCR",
+      "revision": null,
+      "max_new_tokens": 48,
+      "num_beams": 4
+    },
+    "split": "golden",
+    "manifest": "manifests/manifest_apti.json",
+    "norm_version": "1.1.0",
+    "scoring_profile": "scoring_v1",
+    "seed": 20260901,
+    "moocr_version": "3.0.0",
+    "git_commit": "72ca274ffb58fc65504f443fe788c8692e200d61",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "timestamp": "2026-09-30T16:19:53"
+  },
+  "n_samples": 10,
+  "n_failures": 0,
+  "failures": [],
+  "scores": {
+    "raw": {
+      "corpus_cer": 0.75,
+      "macro_cer": 0.7499603174603174,
+      "exact_match": 0.0,
+      "n": 10
+    },
+    "normalized": {
+      "corpus_cer": 0.7368421052631579,
+      "macro_cer": 0.7388492063492064,
+      "exact_match": 0.0,
+      "n": 10
+    },
+    "wer": "suppressed: all references are single words; WER degenerates to exact-match"
+  },
+  "bidi_check": {
+    "n_reversed_better": 1,
+    "indices": [
+      9
+    ]
+  },
+  "slices": {
+    "len_bucket=long(>=9)": {
+      "n": 2,
+      "corpus_cer": 0.7368421052631579,
+      "macro_cer": 0.7388888888888889,
+      "exact_match": 0.0
+    },
+    "len_bucket=medium(5-8)": {
+      "n": 8,
+      "corpus_cer": 0.7368421052631579,
+      "macro_cer": 0.7388392857142857,
+      "exact_match": 0.0
+    },
+    "has_digit=False": {
+      "n": 10,
+      "corpus_cer": 0.7368421052631579,
+      "macro_cer": 0.7388492063492064,
+      "exact_match": 0.0
+    }
+  },
+  "confusions_top30": [
+    {
+      "ref": "ا",
+      "hyp": "∅",
+      "count": 5
+    },
+    {
+      "ref": "ي",
+      "hyp": "∅",
+      "count": 4
+    },
+    {
+      "ref": "∅",
+      "hyp": "ه",
+      "count": 3
+    },
+    {
+      "ref": "و",
+      "hyp": "∅",
+      "count": 3
+    },
+    {
+      "ref": "∅",
+      "hyp": "ل",
+      "count": 3
+    },
+    {
+      "ref": "∅",
+      "hyp": "م",
+      "count": 2
+    },
+    {
+      "ref": "ر",
+      "hyp": "∅",
+      "count": 2
+    },
+    {
+      "ref": "ق",
+      "hyp": "∅",
+      "count": 2
+    },
+    {
+      "ref": "ب",
+      "hyp": "م",
+      "count": 2
+    },
+    {
+      "ref": "د",
+      "hyp": "∅",
+      "count": 2
+    },
+    {
+      "ref": "ئ",
+      "hyp": "د",
+      "count": 1
+    },
+    {
+      "ref": "ع",
+      "hyp": "ط",
+      "count": 1
+    },
+    {
+      "ref": "ل",
+      "hyp": "ط",
+      "count": 1
+    },
+    {
+      "ref": "ج",
+      "hyp": "∅",
+      "count": 1
+    },
+    {
+      "ref": "ت",
+      "hyp": "∅",
+      "count": 1
+    },
+    {
+      "ref": "ل",
+      "hyp": "ق",
+      "count": 1
+    },
+    {
+      "ref": "و",
+      "hyp": "ص",
+      "count": 1
+    },
+    {
+      "ref": "ن",
+      "hyp": "ه",
+      "count": 1
+    },
+    {
+      "ref": "ب",
+      "hyp": "ي",
+      "count": 1
+    },
+    {
+      "ref": "ك",
+      "hyp": "د",
+      "count": 1
+    },
+    {
+      "ref": "ح",
+      "hyp": "ج",
+      "count": 1
+    },
+    {
+      "ref": "ي",
+      "hyp": "م",
+      "count": 1
+    },
+    {
+      "ref": "ك",
+      "hyp": "م",
+      "count": 1
+    },
+    {
+      "ref": "ث",
+      "hyp": "ك",
+      "count": 1
+    },
+    {
+      "ref": "∅",
+      "hyp": " ",
+      "count": 1
+    },
+    {
+      "ref": "∅",
+      "hyp": "ا",
+      "count": 1
+    },
+    {
+      "ref": "∅",
+      "hyp": "غ",
+      "count": 1
+    },
+    {
+      "ref": "∅",
+      "hyp": "ر",
+      "count": 1
+    },
+    {
+      "ref": "∅",
+      "hyp": "ب",
+      "count": 1
+    },
+    {
+      "ref": "ئ",
+      "hyp": "∅",
+      "count": 1
+    }
+  ],
+  "latency_ms": {
+    "note": "successful samples only",
+    "median": 135.9,
+    "p95": 414.3,
+    "mean": 166.0
+  },
+  "per_sample": [
+    {
+      "id": "word_00144",
+      "truth": "الدوائر",
+      "pred": "الهدادرة",
+      "confidence": 0.9540952444076538,
+      "latency_ms": 414.3,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00186",
+      "truth": "ومعالجتها",
+      "pred": "مطماطة",
+      "confidence": 0.9364311099052429,
+      "latency_ms": 134.5,
+      "failed": false,
+      "len_bucket": "long(>=9)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00215",
+      "truth": "ليفونيا",
+      "pred": "قفصة",
+      "confidence": 0.9351627826690674,
+      "latency_ms": 133.6,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00239",
+      "truth": "المبكرة",
+      "pred": "الميدة",
+      "confidence": 0.9898009896278381,
+      "latency_ms": 132.1,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00252",
+      "truth": "والحياكة",
+      "pred": "الجماملة",
+      "confidence": 0.9468820691108704,
+      "latency_ms": 131.2,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00264",
+      "truth": "الثقافي",
+      "pred": "الكاف الغربي",
+      "confidence": 0.936840832233429,
+      "latency_ms": 132.4,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00284",
+      "truth": "الإسرائيلي",
+      "pred": "اللاس",
+      "confidence": 0.9465660452842712,
+      "latency_ms": 139.7,
+      "failed": false,
+      "len_bucket": "long(>=9)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00315",
+      "truth": "متلقيها",
+      "pred": "متلين",
+      "confidence": 0.9863911867141724,
+      "latency_ms": 165.1,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00316",
+      "truth": "باشتداد",
+      "pred": "مطماطة",
+      "confidence": 0.8876166939735413,
+      "latency_ms": 139.7,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00341",
+      "truth": "بانضمام",
+      "pred": "مطماطة",
+      "confidence": 0.9962568283081055,
+      "latency_ms": 137.3,
+      "failed": false,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    }
+  ]
+}

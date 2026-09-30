@@ -1,16 +1,50 @@
 {
-  "purpose": "Select an Arabic TrOCR checkpoint (no official one exists). Screened on the first 10 golden samples; a candidate needed to be within reach of EasyOCR (0.2332 dev/golden corpus CER) to justify a full run.",
-  "norm_version": "1.1.0",
+  "purpose": "Select an Arabic TrOCR checkpoint (the TrOCR authors released none). Screened on the first 10 golden samples; a candidate needed to be within reach of EasyOCR (0.2332 corpus CER on golden and dev) to justify a full run.",
   "screened": [
-    {"checkpoint": "RayR1/trocr-base-arabic-handwritten", "cer_norm_10": 0.8947, "exact": 0.0, "failure_mode": "unrelated text (handwriting-trained, no transfer to printed)"},
-    {"checkpoint": "gagan3012/ArOCR", "cer_norm_10": 0.7368, "exact": 0.0, "failure_mode": "fluent but wrong words"},
-    {"checkpoint": "ziad99/trocr2-arabic", "cer_norm_10": 0.7105, "exact": 0.0, "failure_mode": "mojibake / replacement chars"},
-    {"checkpoint": "hedo2023/arabic-trocr-universal-v1", "cer_norm_10": 1.0, "exact": 0.0, "failure_mode": "empty output"}
+    {
+      "checkpoint": "ziad99/trocr2-arabic",
+      "cer_norm_10": 0.7105,
+      "exact": 0.0,
+      "failures": 0,
+      "failure_mode": "broken characters (replacement glyphs)"
+    },
+    {
+      "checkpoint": "gagan3012/ArOCR",
+      "cer_norm_10": 0.7368,
+      "exact": 0.0,
+      "failures": 0,
+      "failure_mode": "real words, none correct (Tunisian place names)"
+    },
+    {
+      "checkpoint": "RayR1/trocr-base-arabic-handwritten",
+      "cer_norm_10": 0.8947,
+      "exact": 0.0,
+      "failures": 0,
+      "failure_mode": "unrelated text"
+    },
+    {
+      "checkpoint": "hedo2023/arabic-trocr-universal-v1",
+      "cer_norm_10": null,
+      "exact": null,
+      "failures": 10,
+      "failure_mode": "did not run: NotImplementedError 'Cannot copy out of meta tensor; no data!' on every image. An earlier version of this file recorded this as 'empty output, CER 1.00', which was the harness scoring ten failures, not a recognition result."
+    }
   ],
-  "decision": "NEGATIVE RESULT: no community TrOCR checkpoint is competitive on printed APTI. TrOCR engine remains implemented (models/trocr.py) but is not part of the evaluated configuration. In-domain fine-tuning is the only viable TrOCR path and was out of scope.",
+  "decision": "NEGATIVE RESULT: of four community TrOCR checkpoints, three ran and none read a word correctly on a ten-image screen (CER 0.71 to 0.89 against EasyOCR's 0.23); the fourth could not be run. TrOCR engine remains implemented (models/trocr.py) but is not part of the evaluated configuration. In-domain fine-tuning was out of scope.",
   "also_rejected_without_screening": [
-    {"checkpoint": "tarek3laa/TROCR_Arabic", "reason": "config.json 404 (repo incomplete)"},
-    {"checkpoint": "lehrasibali/trocr-finetuned-arabic", "reason": "no processor config"},
-    {"checkpoint": "Ghazouaniwala/trocr-tunisian-arabic", "reason": "dialectal target, out of MSA scope"}
-  ]
+    {
+      "checkpoint": "tarek3laa/TROCR_Arabic",
+      "reason": "config.json 404 (repo incomplete)"
+    },
+    {
+      "checkpoint": "lehrasibali/trocr-finetuned-arabic",
+      "reason": "no processor config"
+    },
+    {
+      "checkpoint": "Ghazouaniwala/trocr-tunisian-arabic",
+      "reason": "dialectal target, out of MSA scope"
+    }
+  ],
+  "run_files": "results/trocr_screen_<owner>_<name>.json, produced by moocr.harness.evaluate --engine trocr --split golden --max-samples 10",
+  "norm_version": "1.1.0"
 }

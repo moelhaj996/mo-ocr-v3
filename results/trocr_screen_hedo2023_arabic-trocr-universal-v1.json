@@ -1,0 +1,323 @@
+{
+  "meta": {
+    "engine": "trocr",
+    "engine_config": {
+      "checkpoint": "hedo2023/arabic-trocr-universal-v1",
+      "revision": null,
+      "max_new_tokens": 48,
+      "num_beams": 4
+    },
+    "split": "golden",
+    "manifest": "manifests/manifest_apti.json",
+    "norm_version": "1.1.0",
+    "scoring_profile": "scoring_v1",
+    "seed": 20260901,
+    "moocr_version": "3.0.0",
+    "git_commit": "72ca274ffb58fc65504f443fe788c8692e200d61",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "timestamp": "2026-09-30T16:20:58"
+  },
+  "n_samples": 10,
+  "n_failures": 10,
+  "failures": [
+    {
+      "id": "word_00144",
+      "error": "NotImplementedError('Cannot copy out of meta tensor; no data!')"
+    },
+    {
+      "id": "word_00186",
+      "error": "NotImplementedError('Cannot copy out of meta tensor; no data!')"
+    },
+    {
+      "id": "word_00215",
+      "error": "NotImplementedError('Cannot copy out of meta tensor; no data!')"
+    },
+    {
+      "id": "word_00239",
+      "error": "NotImplementedError('Cannot copy out of meta tensor; no data!')"
+    },
+    {
+      "id": "word_00252",
+      "error": "NotImplementedError('Cannot copy out of meta tensor; no data!')"
+    },
+    {
+      "id": "word_00264",
+      "error": "NotImplementedError('Cannot copy out of meta tensor; no data!')"
+    },
+    {
+      "id": "word_00284",
+      "error": "NotImplementedError('Cannot copy out of meta tensor; no data!')"
+    },
+    {
+      "id": "word_00315",
+      "error": "NotImplementedError('Cannot copy out of meta tensor; no data!')"
+    },
+    {
+      "id": "word_00316",
+      "error": "NotImplementedError('Cannot copy out of meta tensor; no data!')"
+    },
+    {
+      "id": "word_00341",
+      "error": "NotImplementedError('Cannot copy out of meta tensor; no data!')"
+    }
+  ],
+  "scores": {
+    "raw": {
+      "corpus_cer": 1.0,
+      "macro_cer": 1.0,
+      "exact_match": 0.0,
+      "n": 10
+    },
+    "normalized": {
+      "corpus_cer": 1.0,
+      "macro_cer": 1.0,
+      "exact_match": 0.0,
+      "n": 10
+    },
+    "wer": "suppressed: all references are single words; WER degenerates to exact-match"
+  },
+  "bidi_check": {
+    "n_reversed_better": 0,
+    "indices": []
+  },
+  "slices": {
+    "len_bucket=long(>=9)": {
+      "n": 2,
+      "corpus_cer": 1.0,
+      "macro_cer": 1.0,
+      "exact_match": 0.0
+    },
+    "len_bucket=medium(5-8)": {
+      "n": 8,
+      "corpus_cer": 1.0,
+      "macro_cer": 1.0,
+      "exact_match": 0.0
+    },
+    "has_digit=False": {
+      "n": 10,
+      "corpus_cer": 1.0,
+      "macro_cer": 1.0,
+      "exact_match": 0.0
+    }
+  },
+  "confusions_top30": [
+    {
+      "ref": "ا",
+      "hyp": "∅",
+      "count": 18
+    },
+    {
+      "ref": "ل",
+      "hyp": "∅",
+      "count": 9
+    },
+    {
+      "ref": "ي",
+      "hyp": "∅",
+      "count": 7
+    },
+    {
+      "ref": "م",
+      "hyp": "∅",
+      "count": 5
+    },
+    {
+      "ref": "و",
+      "hyp": "∅",
+      "count": 4
+    },
+    {
+      "ref": "ه",
+      "hyp": "∅",
+      "count": 4
+    },
+    {
+      "ref": "د",
+      "hyp": "∅",
+      "count": 3
+    },
+    {
+      "ref": "ر",
+      "hyp": "∅",
+      "count": 3
+    },
+    {
+      "ref": "ت",
+      "hyp": "∅",
+      "count": 3
+    },
+    {
+      "ref": "ب",
+      "hyp": "∅",
+      "count": 3
+    },
+    {
+      "ref": "ئ",
+      "hyp": "∅",
+      "count": 2
+    },
+    {
+      "ref": "ف",
+      "hyp": "∅",
+      "count": 2
+    },
+    {
+      "ref": "ن",
+      "hyp": "∅",
+      "count": 2
+    },
+    {
+      "ref": "ك",
+      "hyp": "∅",
+      "count": 2
+    },
+    {
+      "ref": "ق",
+      "hyp": "∅",
+      "count": 2
+    },
+    {
+      "ref": "ع",
+      "hyp": "∅",
+      "count": 1
+    },
+    {
+      "ref": "ج",
+      "hyp": "∅",
+      "count": 1
+    },
+    {
+      "ref": "ح",
+      "hyp": "∅",
+      "count": 1
+    },
+    {
+      "ref": "ث",
+      "hyp": "∅",
+      "count": 1
+    },
+    {
+      "ref": "س",
+      "hyp": "∅",
+      "count": 1
+    },
+    {
+      "ref": "ش",
+      "hyp": "∅",
+      "count": 1
+    },
+    {
+      "ref": "ض",
+      "hyp": "∅",
+      "count": 1
+    }
+  ],
+  "latency_ms": {
+    "note": "successful samples only",
+    "median": 0.0,
+    "p95": 0.0,
+    "mean": 0.0
+  },
+  "per_sample": [
+    {
+      "id": "word_00144",
+      "truth": "الدوائر",
+      "pred": "",
+      "confidence": null,
+      "latency_ms": 510.7,
+      "failed": true,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00186",
+      "truth": "ومعالجتها",
+      "pred": "",
+      "confidence": null,
+      "latency_ms": 56.2,
+      "failed": true,
+      "len_bucket": "long(>=9)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00215",
+      "truth": "ليفونيا",
+      "pred": "",
+      "confidence": null,
+      "latency_ms": 44.1,
+      "failed": true,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00239",
+      "truth": "المبكرة",
+      "pred": "",
+      "confidence": null,
+      "latency_ms": 44.4,
+      "failed": true,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00252",
+      "truth": "والحياكة",
+      "pred": "",
+      "confidence": null,
+      "latency_ms": 44.2,
+      "failed": true,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00264",
+      "truth": "الثقافي",
+      "pred": "",
+      "confidence": null,
+      "latency_ms": 43.7,
+      "failed": true,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00284",
+      "truth": "الإسرائيلي",
+      "pred": "",
+      "confidence": null,
+      "latency_ms": 43.5,
+      "failed": true,
+      "len_bucket": "long(>=9)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00315",
+      "truth": "متلقيها",
+      "pred": "",
+      "confidence": null,
+      "latency_ms": 44.3,
+      "failed": true,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00316",
+      "truth": "باشتداد",
+      "pred": "",
+      "confidence": null,
+      "latency_ms": 44.1,
+      "failed": true,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    },
+    {
+      "id": "word_00341",
+      "truth": "بانضمام",
+      "pred": "",
+      "confidence": null,
+      "latency_ms": 43.9,
+      "failed": true,
+      "len_bucket": "medium(5-8)",
+      "has_digit": false
+    }
+  ]
+}
