@@ -1,5 +1,11 @@
 # MO-OCR v3 — Architecture & Milestone Plan
 
+> **Historical document.** This is the plan as written before the work
+> started. It calls the data "APTI", which later turned out to be a folder
+> label and not the dataset's origin (see LIMITATIONS.md), and it describes
+> the golden split as a pure regression set, which is not how it ended up
+> being used (see METHOD.md). It is kept unchanged below for the record.
+
 Fresh implementation (no code carried over from mo-ocr-v2). Target: an Arabic
 document-intelligence pipeline whose every reported number is reproducible,
 built to the original four-model specification, evaluated under the

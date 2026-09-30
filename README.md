@@ -15,7 +15,7 @@ and results that did not work are reported alongside those that did.
 
 ## Results
 
-Held-out split, 1,750 images, scored once after every decision was frozen.
+Held-out split, 1,750 images. No decision used this split.
 
 | System | CER (normalized) | Exact match |
 |---|---|---|
@@ -24,9 +24,13 @@ Held-out split, 1,750 images, scored once after every decision was frozen.
 | **MO-OCR arbitration** | **0.1710** | **32.7%** |
 
 The improvement over the baseline is −0.0584 corpus CER, with a 95% paired
-bootstrap confidence interval of −0.0664 to −0.0505. The same policy scored
-0.1666 on the dev split and 0.1684 on the golden split, so the tuned
-configuration generalized.
+bootstrap confidence interval of −0.0664 to −0.0505.
+
+This result is sensitive to one hand-set limit. The length limit in the
+degeneration flag was lowered from 40 to 30 characters after two refusals
+slipped through on the 50-image pilot set. With the original limit the
+held-out error rate is 0.2057 instead of 0.1710. The two versions differ on
+15 of the 1,750 outputs. Exact match is 32.6% and 32.7% respectively.
 
 Qwen2-VL alone has the best exact-match rate and the worst error rate. It
 either reads a word perfectly or produces long off-topic text. Arbitration
@@ -64,27 +68,31 @@ The gate uses two signals, and neither needs ground truth:
   or containing non-Arabic letters, is treated as a failed read. On the
   held-out split this caught 369 of 385 catastrophic outputs with zero false
   alarms on correct ones.
-- **Confidence threshold.** Qwen2-VL's mean token probability must reach
-  0.40 for word crops. This value was chosen on the dev split.
+- **Confidence threshold.** The geometric mean of Qwen2-VL's token
+  probabilities must reach 0.40 for word crops. This value was chosen on the
+  dev split.
 
-EasyOCR's own confidence score is never used for routing. It correlates
-with correctness at only r = 0.17 on this data.
+Neither test is enough alone. On the held-out split the flag alone scores
+0.2235 and the threshold alone 0.8415.
+
+EasyOCR's own confidence score is never used for routing. Its correlation
+with correctness ranged from 0.09 to 0.28 across the three splits.
 
 ### Evaluation protocol
 
 ```mermaid
 flowchart LR
-    DATA["APTI corpus<br/>2,000 word images"] --> MAN{"Seeded split<br/>hashed manifest"}
+    DATA["Word-image corpus<br/>2,000 images"] --> MAN{"Seeded split<br/>hashed manifest"}
 
-    MAN --> GOLD["Golden, 50<br/>regression only"]
-    MAN --> DEV["Dev, 200<br/>all tuning"]
-    MAN --> HELD["Held-out, 1,750<br/>never tuned on"]
+    MAN --> GOLD["Pilot set, 50<br/>rule design"]
+    MAN --> DEV["Dev, 200<br/>threshold tuning"]
+    MAN --> HELD["Held-out, 1,750<br/>no decisions"]
 
-    DEV --> TUNE["Policy sweep and<br/>threshold selection"]
-    TUNE --> FROZEN["Frozen configuration"]
+    GOLD --> FROZEN["Frozen rule"]
+    DEV --> TUNE["Threshold<br/>sweep"]
+    TUNE --> FROZEN
 
-    GOLD --> SCORE["Scoring<br/>raw and normalized CER"]
-    FROZEN --> SCORE
+    FROZEN --> SCORE["Scoring<br/>raw and normalized CER"]
     HELD --> SCORE
 
     SCORE --> CI["Paired bootstrap<br/>confidence intervals"]
@@ -117,8 +125,8 @@ These are measured outcomes, kept in the record on purpose.
 
 | Attempt | Outcome | Decision |
 |---|---|---|
-| Community Arabic TrOCR checkpoints, four screened | CER 0.71 to 1.00 against EasyOCR's 0.23 | Not used |
-| CamelBERT post-correction | Net negative at every margin. Best case fixed 13 words and broke 17 | Shipped disabled |
+| Community Arabic TrOCR checkpoints, four tried on ten images | Three ran, CER 0.71 to 0.89 against EasyOCR's 0.23. One failed to run | Not used |
+| CamelBERT post-correction | Never fixed more words than it broke. Harmful at small margins, no measurable effect at the strictest (19 fixed, 19 broken) | Shipped disabled |
 | LayoutLMv3 structuring | Integrated and smoke-tested, but no labelled data exists to score it | No claim made |
 
 ## Installation
@@ -183,10 +191,13 @@ Regenerate every reported number:
 ./scripts/reproduce.sh
 ```
 
-The APTI images are not distributed with this repository. Place the
-image and text pairs under `data/apti/` before running an evaluation. The
-committed manifest records a SHA-256 hash for every file, and the
-reproduction script refuses to continue if the splits do not match.
+The images are not distributed with this repository. They are the first
+2,000 rows of the Hugging Face dataset `mssqpi/Arabic-OCR-Dataset`, which was
+no longer publicly accessible in September 2026, so its license could not be
+confirmed. The folder and manifest are named `apti` for historical reasons
+only, and there is no evidence the images come from the APTI database. The
+committed manifest records a SHA-256 hash for every file. Without the images,
+reproduction means rescoring the published run files.
 
 ## Repository layout
 
@@ -205,6 +216,7 @@ reproduction script refuses to continue if the splits do not match.
 
 ## Documentation
 
+- [paper/paper.pdf](./paper/paper.pdf) is the technical report.
 - [RESULTS.md](./RESULTS.md) has every measured number, including rejected changes.
 - [METHOD.md](./METHOD.md) describes the pipeline precisely enough to reimplement.
 - [LIMITATIONS.md](./LIMITATIONS.md) states what the system and its evaluation do not cover.
@@ -212,8 +224,8 @@ reproduction script refuses to continue if the splits do not match.
 
 ## Limitations
 
-The quantitative evaluation covers printed, single-word, Modern Standard
-Arabic images only. Handwriting, dialectal text and full-page layouts are
+The quantitative evaluation covers 2,000 small synthetic printed word
+images from one source whose provenance is not fully established. Handwriting, dialectal text and full-page layouts are
 not measured. The page engine works, but its thresholds were set by
 inspection and carry no accuracy claim. See
 [LIMITATIONS.md](./LIMITATIONS.md) for the complete statement.

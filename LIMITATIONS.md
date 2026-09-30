@@ -6,8 +6,17 @@ claim.
 
 ## Evaluation data
 
+- **Provenance is not fully established.** The 2,000 images are the first
+  rows of the Hugging Face dataset `mssqpi/Arabic-OCR-Dataset`, downloaded in
+  May 2026 and stored under a folder named `apti`. That name is a legacy
+  label; there is no evidence the images come from the APTI database. The
+  source dataset was no longer publicly accessible on 30 September 2026, so
+  its license and generation process could not be confirmed and the images
+  are not redistributed. Reproduction is limited to rescoring the published
+  run files.
 - **Single-word printed images only.** The entire quantitative evaluation is
-  APTI: 2,000 synthetic printed Arabic word crops. Consequences:
+  these 2,000 synthetic printed Arabic word crops, 35 pixels high, with
+  labels of 7 to 10 characters. Consequences:
   - **WER is meaningless here** and is deliberately suppressed (it
     degenerates to exact-match on single words; the v2 project reported
     WER=1.01 on this data, which was an artifact).
@@ -17,8 +26,9 @@ claim.
   - Slice reporting covers word length and digit presence; there is no
     document-type or scan-quality axis because the corpus has none.
 - **No handwritten evaluation.** KHATT is registration-gated and absent.
-  The two screened community TrOCR checkpoints are handwriting-trained, so
-  their poor APTI numbers say nothing about their handwriting performance.
+  At least one of the four screened community TrOCR checkpoints is
+  handwriting-trained, so poor numbers on this data say nothing about
+  handwriting performance.
 - **MSA only.** Normalization (v1.1.0) folds orthographic variants that are
   safe for MSA. Per the evaluation protocol, these rules are NOT validated
   for dialectal text and would collapse meaningful dialectal distinctions.
@@ -36,13 +46,17 @@ claim.
 - **Qwen2-VL-2B stands in for "Qwen-VL"** (the original checkpoint is
   deprecated upstream and too large for the 16 GB target machine).
 - **TrOCR has no official Arabic checkpoint.** Community checkpoints were
-  screened and all underperformed EasyOCR on printed APTI (see RESULTS);
+  screened on ten images and all underperformed EasyOCR (see RESULTS);
   TrOCR is therefore integrated but not part of the winning configuration.
   In-domain fine-tuning was NOT attempted (no training budget in scope).
-- **Confidence signals**: EasyOCR's confidence is nearly uninformative on
-  this data (r≈0.09 with correctness) and is never used for routing.
-  Qwen2-VL's mean-token-logprob is moderately informative (r≈0.48) and is
-  used, with a threshold chosen on dev.
+- **Confidence signals**: EasyOCR's confidence is weakly related to
+  correctness on this data (r between 0.09 and 0.28 across splits) and is
+  never used for routing; whether adding it would help was not tested.
+  Qwen2-VL's confidence is moderately informative (r about 0.46 to 0.50) and
+  is used, with a threshold chosen on dev.
+- **One prompt, one checkpoint.** Only one Arabic prompt was tried and the
+  Qwen2-VL revision was not pinned. The rate of refusals and prompt echoes
+  may depend on both.
 
 ## Page-level reading
 
@@ -58,15 +72,25 @@ claim.
 
 ## Method
 
-- The arbitration policy (primary/fallback, τ=0.40, degeneration flag
-  thresholds) was tuned on the 200-sample dev split. Golden is a regression
-  set; the held-out split is scored once, after all decisions were frozen.
-  Numbers on dev are optimistic by construction; cite held-out numbers.
-- The degeneration flag v2 thresholds were chosen on dev (0 false alarms)
-  but the *motivation* for revisiting them came from a failure observed in
-  golden; this is disclosed in RESULTS and the held-out run arbitrates.
-- Latency numbers are single-machine (Apple M2 Pro, MPS) medians; no
-  batching, no throughput optimization was attempted.
+- Only the confidence threshold (τ=0.40) was tuned on the 200-sample dev
+  split. The routing design and the degeneration flag were written from the
+  50-image golden set, and the flag limits were lowered once after two golden
+  refusals passed both tests. Golden and dev numbers for arbitration are
+  therefore in-sample; cite held-out numbers. No decision used held-out.
+- **The headline result is sensitive to the flag limits.** With the original
+  limits (40 characters, 3 non-Arabic letters) the held-out error rate is
+  0.2057 instead of 0.1710. The two versions differ on 15 held-out outputs,
+  11 of them one identical 40-character refusal. Exact match is 32.6% and
+  32.7% respectively.
+- The arbitration numbers are computed by replaying the rule over stored
+  per-engine outputs; the combined engine was not run end to end on the
+  full split.
+- EasyOCR is run with its default detector on word crops, and 260 of its
+  1,750 held-out outputs contain a spurious space. With spaces removed from
+  both systems the comparison is 0.2102 against 0.1587.
+- Latency numbers are single-machine (Apple M2 Pro, MPS); the held-out
+  EasyOCR run shared the machine with another job. No batching or
+  throughput optimization was attempted.
 - The self-correction (CamelBERT reranking) ships disabled unless its dev
   fix/break balance is net-positive with CI excluding zero — see RESULTS
   for the measured outcome.
