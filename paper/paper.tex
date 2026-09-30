@@ -29,7 +29,7 @@
 \frenchspacing
 
 \title{\textbf{Confidence-routed arbitration between a vision-language model
-and a classical OCR engine for Arabic word recognition}}
+and a dedicated OCR engine for Arabic word recognition}}
 \author{Mohamed ElhajSuliman Elnaim Suliman\\[0.3em]
 \small Code and run files: \url{https://github.com/moelhaj996/mo-ocr-v3}}
 \date{September 2026}
@@ -67,14 +67,15 @@ and run files are public.
 
 A vision-language model with two billion parameters now runs on a laptop and
 can read text in an image. I wanted to know whether such a model could replace
-a classical OCR engine for Arabic, or at least improve one. It cannot replace
+a dedicated OCR engine for Arabic, or at least improve one. It cannot replace
 one, but it can improve one if its bad outputs are filtered out.
 
 Qwen2-VL-2B \cite{qwen2vl} often reads a printed Arabic word perfectly. On the
 held-out data used here it gets 515 of 1,750 words exactly right, against 246
-for EasyOCR \cite{easyocr}. But on 385 words it does not transcribe anything.
-Mostly it apologizes or repeats the instruction back, and these outputs run to
-a median of 87 characters where the reference word averages under eight.
+for EasyOCR \cite{easyocr}. But on 385 words its output is not a transcription
+of the word: mostly a refusal or an echo of the instruction, occasionally a
+sentence with a reading buried inside it. These outputs run to a median of 87
+characters where the reference word averages under eight.
 Character error rate punishes that heavily, so the model with the best exact
 match also has by far the worst error rate.
 
@@ -90,16 +91,19 @@ language model's bad outputs be recognized cheaply, without ground truth, well
 enough that routing between the two engines beats both? On this data the
 answer is yes.
 
-I give a routing rule with two tests and measure its effect on a held-out
-split. An ablation shows what each test contributes and how much the result
-depends on one hand-set limit. An error analysis explains where the gain comes
-from: the engines disagree on 1,620 of 1,750 words, and a perfect router would
-reach a character error rate of 0.1449. I also report two negative results,
-and I describe the evaluation harness together with what two rounds of review
-found in it, because several of the defects were of a kind that silently
-changes reported numbers.
+This report contributes four things, all specific to this dataset. It
+documents that the two recognizers make complementary errors: they disagree
+on 1,620 of 1,750 words, and a perfect choice between them would reach a
+character error rate of 0.1449. It evaluates a simple routing policy that
+uses that complementarity, with a held-out result and confidence intervals.
+It reports component ablations and the sensitivity of the result to the
+routing thresholds. And it reports two negative results in full, together
+with what two rounds of review found in the evaluation harness, because
+several of the defects were of a kind that silently changes reported
+numbers.
 
-The scope is narrow. Everything is measured on 2,000 low-resolution printed
+Routing between recognizers is not new, and I make no claim about Arabic
+documents in general. Everything is measured on 2,000 low-resolution printed
 word images from a single source, with one model checkpoint per engine and one
 prompt, on one machine.
 
@@ -132,8 +136,10 @@ systems \cite{koehn}.
 
 \subsection{Recognizers}
 
-The classical engine is EasyOCR 1.7.2 with its Arabic model, run on CPU with
-its default text detector. When the detector returns several regions I join
+The dedicated OCR engine is EasyOCR 1.7.2 with its Arabic model, run on CPU
+with its default text detector. Its detector and recognizer are neural
+networks too; what sets it apart from the language model is that it is built
+and trained only to find and read text. When the detector returns several regions I join
 them in right-to-left reading order.
 
 The vision-language engine is Qwen2-VL-2B-Instruct in half precision on Apple's
@@ -235,11 +241,12 @@ versions of the flag.
 
 \subsection{Pages and visual order}
 
-Feeding a whole multi-line page to Qwen2-VL exposed a separate problem. The
-model returned each line reversed character by character, in the order the
-glyphs appear on screen from left to right, and without line breaks. A string
-like that scores as almost entirely wrong although the model has read every
-letter.
+Feeding a whole multi-line page to Qwen2-VL exposed a separate problem. On
+the one page image I tried, the model returned each line reversed character
+by character, in the order the glyphs appear on screen from left to right, and
+without line breaks. That output is not in a run file, and one image does not
+show how general the behaviour is. A string like that scores as almost
+entirely wrong although the model has read every letter.
 
 The repository contains a repair for this. It compares an output with its
 reversal using orthographic facts that reversal destroys, for instance that
@@ -305,19 +312,36 @@ folds the hamza, madda and wasla forms of alef to bare alef, maps \ar{ة} to
 \ar{ه} and \ar{ى} to \ar{ي}, converts Arabic-Indic digits to ASCII, collapses
 whitespace, and ends with a canonical composition pass (NFC). It is applied
 to reference and hypothesis alike. Habash describes these foldings for Modern
-Standard Arabic \cite{habash}. The alef and \ar{ى} foldings are near
-universal and the \ar{ة} folding is less common. All of them would be wrong
-for dialectal text, where some of the merged forms carry meaning. The text the
-system outputs is not normalized in this way. It keeps its diacritics and
-hamzas.
+Standard Arabic \cite{habash}; the alef and \ar{ى} foldings are the most
+widely applied and the \ar{ة} folding less so.
+
+Normalization is a task-dependent choice, and this profile is deliberately
+forgiving: it credits a system that reads the letters but misses a hamza or a
+dot. Some of the merged forms distinguish real words, in Modern Standard
+Arabic as well as in dialects, for instance \ar{ة} and \ar{ه} at the end of
+a word. The normalized rate therefore counts some genuine errors as correct,
+and the raw rate counts some harmless variation as error. Neither is the
+truth on its own, which is why both are reported. The text the system
+outputs is not normalized in this way. It keeps its diacritics and hamzas.
 
 \subsection{Metrics and statistics}
 
 Character error rate is Levenshtein distance \cite{levenshtein} divided by
 reference length. The primary figure is the corpus rate, total edits over
 total reference characters. Exact match is the share of words with zero
-edits after normalization. I do not report word error rate. Every reference is
-a single word, so it would restate exact match.
+edits after normalization. I use these two as the principal metrics, which is
+a reporting choice suited to a study of single words. Word error rate is
+defined here as well: every reference is one token, but a hypothesis can
+contain several, because EasyOCR's detector sometimes splits a word and
+Qwen2-VL's degenerate outputs are sentences. WER is the total number of word
+substitutions, deletions, and insertions divided by the number of reference
+words. Although each reference contains one word, hypotheses may contain
+several words, so insertions can make WER exceed 1. It is therefore not
+generally equivalent to the exact-mismatch rate. For the record, on the
+held-out split after normalization it is 1.01 for EasyOCR, 3.80 for Qwen2-VL
+and 0.77 for arbitration, and 1.05, 3.82 and 0.80 on raw text. Insertions
+account for 5,416 of Qwen2-VL's 6,645 word edits, and for 271 of 1,775 and
+169 of 1,345 in the other two systems.
 
 Comparisons between systems use a paired bootstrap with 10,000 resamples of
 the words \cite{efron,koehn}. The same resampled indices are applied to both
@@ -326,6 +350,7 @@ systems, and the interval is on the difference.
 A recognizer that raises an exception is scored as a complete miss and also
 counted separately.
 
+\label{sec:replay}
 The arbitration results are computed by replaying the routing rule over the
 stored outputs of the two engines. Routing depends only on the stored text and
 confidence, so the replay is exact, but the combined system was not run end to
@@ -465,6 +490,8 @@ Flag only & 0.2235 & −0.0059 & −0.0195 to +0.0079 \\
 Confidence threshold only & 0.8415 & +0.6122 & +0.4886 to +0.7446 \\
 Original flag and threshold & 0.2057 & −0.0236 & −0.0424 to −0.0035 \\
 Flag and threshold (reported) & 0.1710 & −0.0584 & −0.0664 to −0.0505 \\
+Flag and threshold 0.35 & 0.1760 & −0.0533 & −0.0626 to −0.0440 \\
+Flag and threshold 0.45 & 0.1735 & −0.0559 & −0.0630 to −0.0486 \\
 \midrule
 Perfect degenerate detector & 0.2158 & −0.0136 & −0.0250 to −0.0023 \\
 Perfect router & 0.1449 & −0.0845 & −0.0909 to −0.0783 \\
@@ -485,7 +512,9 @@ sending low-confidence readings to EasyOCR.
 
 Neither test works alone. The flag alone is not distinguishable from EasyOCR.
 The threshold alone is far worse, because some degenerate outputs are
-confident.
+confident. The exact value of the threshold matters little within the range
+chosen on the development split: 0.35 and 0.45 give 0.1760 and 0.1735 on the
+held-out split, within 0.005 of the reported 0.1710.
 
 The result is also sensitive to the flag limits, as Section~\ref{sec:arbitration} warned. With
 the original limits the rule scores 0.2057, still better than EasyOCR but by
@@ -552,14 +581,22 @@ normalized metric forgives, such as a dropped hamza or \ar{ة} read as \ar{ه}.
 
 \subsection{Cost}
 
-Timing is from an Apple M2 Pro with 16 GB of memory. EasyOCR's median time per
-word was 58 to 59 ms on the two smaller splits and 92 ms on the held-out
-split, which was run while another job used the machine. Qwen2-VL's median
-was 471 to 516 ms and its mean 700 to 780 ms, because degenerate outputs run
-to the token limit. Arbitration always pays for the language model and pays
-for EasyOCR as well on about half the words. On the held-out split its total
-running time was 7.8 times that of EasyOCR alone. I did not try batching or
-any other optimization.
+Timing is from an Apple M2 Pro with 16 GB of memory, recorded per image while
+each engine ran alone. EasyOCR's median time per word was 58 to 59 ms on the
+two smaller splits and 92 ms on the held-out split, which was run while
+another job used the machine. Qwen2-VL's median was 471 to 516 ms and its
+mean 698 to 780 ms. The gap between median and mean comes from the
+degenerate outputs, which are about ten times longer (a median of 87
+characters against 7) and take a median of 1.37 s against 0.50 s for the
+rest.
+
+The combined system was not timed end to end, for the same reason its
+accuracy was replayed (Section~\ref{sec:replay}). The cost of arbitration is
+an estimate reconstructed from those per-engine records: Qwen2-VL's time for
+every held-out image plus EasyOCR's time for the 851 images routed to it,
+divided by EasyOCR's time for every image, which gives 7.8. A live run would
+add the routing logic, which is trivial, and could differ through caching and
+machine load. Batching and other optimizations were not tried.
 
 \section{What did not work}
 
@@ -590,11 +627,13 @@ Checkpoint & What it produced & CER \\
 \label{tab:trocr}
 \end{table}
 
-Ten images is a small sample and I would not rank the three on it. The gap to
-EasyOCR's 0.23 is wide enough that I do not expect a larger sample to change
-the decision. I do not read this as a verdict on the checkpoints. At least one
-was trained on handwriting, and tiny printed renderings are far from that.
-None was usable here as downloaded, and I did not attempt fine-tuning.
+Ten images is a compatibility screen, not an evaluation. It established that
+none of the four worked on this data as downloaded, which is what I needed to
+know before choosing a primary engine. It does not rank them, and it supports
+no conclusion about Arabic TrOCR models in general. At least one was trained
+on handwriting, and tiny printed renderings are far from that. A proper
+comparison would need a larger sample and, most likely, fine-tuning on
+matching data, which I did not attempt.
 
 \subsection{Reranking with a masked language model}
 \label{sec:rerank}
@@ -661,8 +700,9 @@ misbehaves with this one prompt, and Section~\ref{sec:ablation} shows how
 much rides on its limits. The confidence threshold was tuned on 200 words and
 would need retuning for another model.
 
-The normalization assumes Modern Standard Arabic. The arbitration numbers
-come from replaying the rule over stored outputs. All timing is from one
+The normalization profile was chosen for Modern Standard Arabic and was not
+validated on dialectal text. The arbitration numbers come from replaying the
+rule over stored outputs. All timing is from one
 laptop. The page mode was tried on a single image, and the visual-order repair
 changed none of the stored word outputs, so its benefit is unmeasured.
 
