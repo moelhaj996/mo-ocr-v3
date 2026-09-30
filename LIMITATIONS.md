@@ -17,9 +17,11 @@ claim.
 - **Single-word printed images only.** The entire quantitative evaluation is
   these 2,000 synthetic printed Arabic word crops, 35 pixels high, with
   labels of 7 to 10 characters. Consequences:
-  - **WER is meaningless here** and is deliberately suppressed (it
-    degenerates to exact-match on single words; the v2 project reported
-    WER=1.01 on this data, which was an artifact).
+  - **WER is not a principal metric here.** WER is word substitutions,
+    deletions and insertions over reference words. References are single
+    tokens but hypotheses often are not, so insertions can push it above 1,
+    and it is not in general the exact-mismatch rate. It is reported for the
+    record in `results/paper_stats.json`.
   - **Segmentation and layout stages are untested by construction** — a word
     crop has nothing to segment. The RTL region-ordering logic is unit-tested
     on synthetic geometry only.
@@ -29,9 +31,12 @@ claim.
   At least one of the four screened community TrOCR checkpoints is
   handwriting-trained, so poor numbers on this data say nothing about
   handwriting performance.
-- **MSA only.** Normalization (v1.1.0) folds orthographic variants that are
-  safe for MSA. Per the evaluation protocol, these rules are NOT validated
-  for dialectal text and would collapse meaningful dialectal distinctions.
+- **Normalization is a forgiving, task-dependent choice.** The scoring
+  profile (v1.1.0) folds variants that are commonly folded for MSA, but some
+  of the merged forms distinguish real words in MSA and in dialects (for
+  example final ة and ه). The normalized rate therefore forgives some genuine
+  errors and the raw rate penalizes some harmless variation; both are
+  reported. The rules were not validated on dialectal text.
 - **Ground truth is undiacritized single tokens**; diacritic-recognition
   quality is therefore unmeasured (scoring strips diacritics; output keeps
   them).
@@ -45,8 +50,9 @@ claim.
   anywhere.**
 - **Qwen2-VL-2B stands in for "Qwen-VL"** (the original checkpoint is
   deprecated upstream and too large for the 16 GB target machine).
-- **TrOCR has no official Arabic checkpoint.** Community checkpoints were
-  screened on ten images and all underperformed EasyOCR (see RESULTS);
+- **TrOCR has no official Arabic checkpoint.** Four community checkpoints
+  were tried on ten images: none read a word correctly as downloaded and one
+  failed to run. That is a compatibility screen, not a ranking (see RESULTS);
   TrOCR is therefore integrated but not part of the winning configuration.
   In-domain fine-tuning was NOT attempted (no training budget in scope).
 - **Confidence signals**: EasyOCR's confidence is weakly related to
@@ -88,8 +94,10 @@ claim.
 - EasyOCR is run with its default detector on word crops, and 260 of its
   1,750 held-out outputs contain a spurious space. With spaces removed from
   both systems the comparison is 0.2102 against 0.1587.
-- Latency numbers are single-machine (Apple M2 Pro, MPS); the held-out
-  EasyOCR run shared the machine with another job. No batching or
+- Latency numbers are single-machine (Apple M2 Pro, MPS), recorded per
+  engine running alone; the held-out EasyOCR run shared the machine with
+  another job. The 7.8x arbitration cost is reconstructed from those
+  per-engine records, not measured on the combined engine. No batching or
   throughput optimization was attempted.
 - The self-correction (CamelBERT reranking) ships disabled unless its dev
   fix/break balance is net-positive with CI excluding zero — see RESULTS

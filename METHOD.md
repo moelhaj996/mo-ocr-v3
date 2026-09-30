@@ -52,8 +52,13 @@ Every result file records `norm_version`.
 
 - CER: Levenshtein / reference length. Corpus CER (primary) = Σedits/Σref-chars;
   macro CER and exact-match secondary. Reported on raw AND normalized text.
-- WER: suppressed on this corpus (single-word references) with the reason
-  stated in every result file.
+- WER: not a principal metric on this corpus. WER = (word substitutions +
+  deletions + insertions) / reference words. References are single tokens but
+  hypotheses are not always, so insertions can push it above 1, and it is not
+  in general the exact-mismatch rate (held-out, normalized: 1.01 EasyOCR, 3.80
+  Qwen2-VL, 0.77 arbitration; raw: 1.05, 3.82, 0.80; from
+  `scripts/paper_stats.py`). Result files carry a note saying so; the note in
+  the committed files uses older wording.
 - Paired bootstrap (10,000 resamples, seed 20260901) on corpus-CER deltas;
   no unpaired comparisons anywhere.
 - Bidi check: count of samples whose reversed hypothesis scores better.
@@ -111,8 +116,9 @@ CI excluding zero — see RESULTS.md for the measured fix/break outcome.
 
 ## Visual-order (bidi) repair — `src/moocr/bidi.py`
 
-Qwen2-VL emits full-page Arabic in VISUAL order (each rendered line
-character-reversed, line order kept). A ground-truth-free detector scores
+On the one page image tried, Qwen2-VL emitted the Arabic in VISUAL order
+(each rendered line character-reversed, line order kept); that output is not
+stored in a run file. A ground-truth-free detector scores
 both readings of the whole output using orthographic asymmetries ("ال/لل"
 word-initial, "ة" word-final and near-impossible word-initially, suffixes
 "ون/ين/ات/ها") and reverses every Arabic line only when the reversed

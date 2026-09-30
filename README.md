@@ -4,7 +4,7 @@
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue.svg)](./pyproject.toml)
 [![Typing](https://img.shields.io/badge/mypy-strict-informational.svg)](./pyproject.toml)
 
-**Arabic OCR that fuses a vision-language model with a classical OCR engine,
+**Arabic OCR that fuses a vision-language model with a dedicated OCR engine,
 measured by an evaluation harness strict enough to publish from.**
 
 MO-OCR v3 reads Arabic text with Qwen2-VL-2B and falls back to EasyOCR
@@ -116,8 +116,14 @@ implements one `recognize(image)` method can be scored. It reports:
 - **Failure accounting.** A failed sample is scored as a total miss and
   also counted separately. Nothing is dropped from a denominator.
 
-Word error rate is deliberately not reported. Every reference in this corpus
-is a single word, so it would only restate exact match.
+Character error rate and exact match are the principal metrics, a reporting
+choice suited to single-word data. Word error rate is still defined: it is
+the total of word substitutions, deletions and insertions divided by the
+number of reference words. Each reference has one word but hypotheses may
+have several, so insertions can push it above 1, and it is not in general the
+same as the exact-mismatch rate.
+On the held-out split, after normalization, it is 1.01 for EasyOCR, 3.80 for
+Qwen2-VL and 0.77 for arbitration (`results/paper_stats.json`).
 
 ## What did not work
 
@@ -125,7 +131,7 @@ These are measured outcomes, kept in the record on purpose.
 
 | Attempt | Outcome | Decision |
 |---|---|---|
-| Community Arabic TrOCR checkpoints, four tried on ten images | Three ran, CER 0.71 to 0.89 against EasyOCR's 0.23. One failed to run | Not used |
+| Community Arabic TrOCR checkpoints, four tried on ten images | None read a word correctly as downloaded; one failed to run. A compatibility screen, not a ranking | Not used |
 | CamelBERT post-correction | Never fixed more words than it broke. Harmful at small margins, no measurable effect at the strictest (19 fixed, 19 broken) | Shipped disabled |
 | LayoutLMv3 structuring | Integrated and smoke-tested, but no labelled data exists to score it | No claim made |
 
@@ -197,7 +203,9 @@ no longer publicly accessible in September 2026, so its license could not be
 confirmed. The folder and manifest are named `apti` for historical reasons
 only, and there is no evidence the images come from the APTI database. The
 committed manifest records a SHA-256 hash for every file. Without the images,
-reproduction means rescoring the published run files.
+reproduction means rescoring the published run files. The committed run files
+predate the current wording of the harness's note on WER, so the `scores.wer`
+text inside them is superseded by `results/paper_stats.json`.
 
 ## Repository layout
 
@@ -225,7 +233,9 @@ reproduction means rescoring the published run files.
 ## Limitations
 
 The quantitative evaluation covers 2,000 small synthetic printed word
-images from one source whose provenance is not fully established. Handwriting, dialectal text and full-page layouts are
+images from one source whose provenance is not fully established. The
+7.8x cost figure for arbitration is reconstructed from per-engine timings,
+not a live measurement of the combined engine. Handwriting, dialectal text and full-page layouts are
 not measured. The page engine works, but its thresholds were set by
 inspection and carry no accuracy claim. See
 [LIMITATIONS.md](./LIMITATIONS.md) for the complete statement.
