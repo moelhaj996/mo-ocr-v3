@@ -1,5 +1,6 @@
 # MO-OCR v3
 
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.23080386-blue.svg)](https://doi.org/10.5281/zenodo.23080386)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE)
 [![Python](https://img.shields.io/badge/python-3.11%2B-blue.svg)](./pyproject.toml)
 [![Typing](https://img.shields.io/badge/mypy-strict-informational.svg)](./pyproject.toml)
@@ -239,6 +240,25 @@ not a live measurement of the combined engine. Handwriting, dialectal text and f
 not measured. The page engine works, but its thresholds were set by
 inspection and carry no accuracy claim. See
 [LIMITATIONS.md](./LIMITATIONS.md) for the complete statement.
+
+## How to cite
+
+The technical report is published on Zenodo: https://doi.org/10.5281/zenodo.23080386
+
+```bibtex
+@techreport{elhajsuliman2026moocr,
+  author    = {ElhajSuliman Elnaim Suliman, Mohamed},
+  title     = {Confidence-routed arbitration between a vision-language model
+               and a dedicated {OCR} engine for {Arabic} word recognition},
+  year      = {2026},
+  month     = oct,
+  institution = {Zenodo},
+  doi       = {10.5281/zenodo.23080386},
+  url       = {https://doi.org/10.5281/zenodo.23080386}
+}
+```
+
+A `CITATION.cff` file is included, so GitHub's "Cite this repository" button gives the same reference.
 
 ## License
 
